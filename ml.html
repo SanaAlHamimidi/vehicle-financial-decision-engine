@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ML Models — VFDE</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+  <nav class="navbar" id="navbar">
+    <div class="nav-logo">VFDE</div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="eda.html">EDA</a></li>
+      <li><a href="analysis.html">Analysis Methods</a></li>
+      <li><a href="ml.html" class="active">ML Models</a></li>
+      <li><a href="findings.html">Major Findings</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </nav>
+
+  <div class="page-hero">
+    <div class="container">
+      <span class="section-tag">Machine Learning</span>
+      <h1>ML Models</h1>
+      <p>The machine learning approaches powering the depreciation rating system — from regression models to ensemble methods trained on California vehicle data.</p>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <span class="section-tag">Models</span>
+      <h2>What we built &amp; tested</h2>
+      <div class="card-grid">
+        <div class="card">
+          <span class="card-num">Model 01</span>
+          <h3>Linear Regression Baseline</h3>
+          <p>Predicts resale price from mileage, age, make, and region. Establishes a performance baseline for more complex models.</p>
+        </div>
+        <div class="card">
+          <span class="card-num">Model 02</span>
+          <h3>Random Forest Regressor</h3>
+          <p>Captures non-linear relationships between vehicle features. Provides feature importance rankings to identify top depreciation drivers.</p>
+        </div>
+        <div class="card">
+          <span class="card-num">Model 03</span>
+          <h3>Gradient Boosting (XGBoost)</h3>
+          <p>High-accuracy ensemble model for final depreciation predictions. Weighted by reliability scores and demand index.</p>
+        </div>
+      </div>
+
+      <div class="chart-placeholder">[ Model Accuracy Comparison (RMSE / R²) — Chart Coming Soon ]</div>
+
+      <span class="section-tag">Evaluation</span>
+      <h2>How we measured performance</h2>
+      <div class="card-grid">
+        <div class="card">
+          <span class="card-num">Metric</span>
+          <h3>RMSE</h3>
+          <p>Root Mean Squared Error — measures how far off predicted resale prices are from actual values in the test set.</p>
+        </div>
+        <div class="card">
+          <span class="card-num">Metric</span>
+          <h3>R² Score</h3>
+          <p>Proportion of variance in resale price explained by the model. Target: R² > 0.80 for production use.</p>
+        </div>
+        <div class="card">
+          <span class="card-num">Metric</span>
+          <h3>Cross-Validation</h3>
+          <p>5-fold CV to ensure models generalize across different California regions and vehicle segments.</p>
+        </div>
+      </div>
+
+      <div class="chart-placeholder">[ Feature Importance — Random Forest — Chart Coming Soon ]</div>
+      <div class="chart-placeholder">[ Predicted vs. Actual Resale Price — Chart Coming Soon ]</div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <span class="footer-logo">VFDE</span>
+      <p>Vehicle Financial Decision Engine · CS163 · Group 20</p>
+      <p>Nyi Wai Yan Tun &amp; Sana Al Hamimidi</p>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>

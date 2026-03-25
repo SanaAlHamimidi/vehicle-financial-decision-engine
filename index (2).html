@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vehicle Financial Decision Engine</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-logo">VFDE</div>
+    <ul class="nav-links">
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="eda.html">EDA</a></li>
+      <li><a href="analysis.html">Analysis Methods</a></li>
+      <li><a href="ml.html">ML Models</a></li>
+      <li><a href="findings.html">Major Findings</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <span class="hero-tag">CS163 · Group 20</span>
+      <h1 class="hero-title">Vehicle Financial<br/><em>Decision Engine</em></h1>
+      <p class="hero-sub">Surfacing the hidden financial ripple of every car purchase — depreciation, insurance, interest, and beyond.</p>
+      <div class="hero-members">
+        <span>Nyi Wai Yan Tun</span>
+        <span class="divider">·</span>
+        <span>Sana Al Hamimidi</span>
+      </div>
+      <a href="#summary" class="btn-primary">Explore the Project</a>
+    </div>
+    <div class="hero-visual">
+      <div class="stat-card" style="--d:0s">
+        <span class="stat-num">5★</span>
+        <span class="stat-label">Depreciation Rating</span>
+      </div>
+      <div class="stat-card" style="--d:0.15s">
+        <span class="stat-num">CA</span>
+        <span class="stat-label">Initial Market Scope</span>
+      </div>
+      <div class="stat-card" style="--d:0.3s">
+        <span class="stat-num">3+</span>
+        <span class="stat-label">ML Models</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- SUMMARY -->
+  <section class="section" id="summary">
+    <div class="container two-col">
+      <div class="col-text">
+        <span class="section-tag">Project Summary</span>
+        <h2>Beyond the sticker price</h2>
+        <p>One of the biggest purchases individuals make after buying a home is a car. While the listed price is a reasonable metric, an often overlooked aspect is the <strong>long-term financial ripple</strong> hidden at the time of purchase.</p>
+        <p>Our platform surfaces depreciation, insurance costs, and interest rates — letting buyers make truly informed decisions before signing anything.</p>
+        <p>Vehicle depreciation doesn't behave uniformly across regions. A truck may hold its value well in rural Northern California while depreciating faster in dense urban markets like San Francisco. Our platform lets users <strong>visually compare depreciation curves</strong> across regions.</p>
+      </div>
+      <div class="col-visual">
+        <div class="info-card">
+          <div class="info-icon">📉</div>
+          <h3>Depreciation</h3>
+          <p>Reduction in market value over time, compared across vehicle types and California regions.</p>
+        </div>
+        <div class="info-card">
+          <div class="info-icon">💸</div>
+          <h3>Interest Rate</h3>
+          <p>Long-term cost of financing — a factor most buyers underestimate at point of sale.</p>
+        </div>
+        <div class="info-card">
+          <div class="info-icon">🛡️</div>
+          <h3>Insurance Cost</h3>
+          <p>Regional premium variation tied to vehicle value, usage, and local market data.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BROADER IMPACTS -->
+  <section class="section alt-bg">
+    <div class="container">
+      <span class="section-tag">Broader Impacts</span>
+      <h2 class="centered">Who benefits?</h2>
+      <div class="impact-grid">
+        <div class="impact-item">
+          <div class="impact-icon">🎓</div>
+          <h3>First-Time &amp; Student Buyers</h3>
+          <p>Build financial awareness and avoid costly long-term mistakes through data-driven guidance.</p>
+        </div>
+        <div class="impact-item">
+          <div class="impact-icon">🚗</div>
+          <h3>Gig Economy Drivers</h3>
+          <p>Uber, Lyft, and DoorDash drivers depend on vehicles as income assets. Our platform helps maximize profitability.</p>
+        </div>
+        <div class="impact-item">
+          <div class="impact-icon">🏪</div>
+          <h3>Small Dealerships</h3>
+          <p>Adjust pricing and inventory strategies to compete with larger dealerships using real depreciation data.</p>
+        </div>
+        <div class="impact-item">
+          <div class="impact-icon">📋</div>
+          <h3>Regional Insurers</h3>
+          <p>More accurate premium pricing using local depreciation curves — without a large internal data science team.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DATA SOURCES -->
+  <section class="section">
+    <div class="container">
+      <span class="section-tag">Data Sources</span>
+      <h2 class="centered">Where the data comes from</h2>
+      <div class="sources-list">
+        <div class="source-item">
+          <span class="source-num">01</span>
+          <div>
+            <strong>National Association of Insurance Commissioners</strong>
+            <p>Auto Insurance Database Report — Average Expenditure by State, 2019–2023</p>
+          </div>
+        </div>
+        <div class="source-item">
+          <span class="source-num">02</span>
+          <div>
+            <strong>Kaggle — Used Cars Dataset</strong>
+            <p>Reese, A. (2021). Craigslist Cars/Trucks Data. Vehicle listings across the US.</p>
+          </div>
+        </div>
+        <div class="source-item">
+          <span class="source-num">03</span>
+          <div>
+            <strong>Additional Datasets (In Progress)</strong>
+            <p>Vehicle registration data, sales data, and interest rate datasets to be cited as discovered.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <span class="footer-logo">VFDE</span>
+      <p>Vehicle Financial Decision Engine · CS163 · Group 20</p>
+      <p>Nyi Wai Yan Tun &amp; Sana Al Hamimidi</p>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
