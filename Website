@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vehicle Financial Decision Engine</title>
+  <style>
+    :root {
+      --bg: #edf3f2;
+      --card: #ffffff;
+      --text: #243f4d;
+      --muted: #4e5f68;
+      --accent1: #214b5b;
+      --accent2: #2e9f96;
+      --border: #dfe8e6;
+      --shadow: 0 10px 25px rgba(22, 42, 51, 0.08);
+      --radius: 18px;
+      --maxw: 1180px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: #1f2933;
+      line-height: 1.6;
+    }
+
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 18px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .brand {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: 0.3px;
+    }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 26px;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 800;
+      font-size: 0.98rem;
+      letter-spacing: 0.3px;
+    }
+
+    .section {
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 18px 24px 0;
+    }
+
+    .hero {
+      margin-top: 18px;
+      background: linear-gradient(135deg, var(--accent1), var(--accent2));
+      color: white;
+      border-radius: var(--radius);
+      min-height: 390px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      box-shadow: var(--shadow);
+      padding: 40px 28px;
+    }
+
+    .hero h1 {
+      margin: 0 0 16px;
+      font-size: clamp(2rem, 5vw, 4rem);
+      line-height: 1.18;
+      font-weight: 800;
+    }
+
+    .hero .meta {
+      margin-top: 22px;
+      font-size: 1.1rem;
+    }
+
+    .hero .meta p {
+      margin: 8px 0;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 28px 30px;
+      margin: 24px 0;
+    }
+
+    .card h2 {
+      margin-top: 0;
+      margin-bottom: 18px;
+      color: var(--text);
+      font-size: 2rem;
+      line-height: 1.2;
+    }
+
+    .card h3 {
+      color: var(--text);
+      margin-top: 0;
+      font-size: 1.5rem;
+    }
+
+    .lead {
+      font-size: 1.05rem;
+      color: #2d3742;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 28px;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .pill {
+      background: #eef7f6;
+      color: var(--text);
+      border: 1px solid #d7e9e6;
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    ul.clean, ol.clean {
+      padding-left: 22px;
+      margin: 0;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .stat {
+      background: #f6fbfa;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.55rem;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .footer {
+      max-width: var(--maxw);
+      margin: 10px auto 40px;
+      padding: 0 24px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .footer a {
+      color: var(--text);
+    }
+
+    @media (max-width: 900px) {
+      .grid-2, .stat-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .nav-links {
+        gap: 14px 18px;
+      }
+
+      .hero {
+        min-height: 320px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <div class="nav-inner">
+      <div class="brand">Vehicle Financial Decision Engine</div>
+      <nav class="nav-links">
+        <a href="#home">HOME</a>
+        <a href="#summary">PROJECT SUMMARY</a>
+        <a href="#data">DATA SOURCES</a>
+        <a href="#findings">FINDINGS</a>
+        <a href="#impact">BROADER IMPACTS</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="section" id="home">
+      <div class="hero">
+        <div>
+          <h1>Vehicle Financial Decision Engine</h1>
+          <div class="meta">
+            <p><strong>Group ID:</strong> 20</p>
+            <p><strong>Members:</strong> Nyi Wai Yan Tun, Sana Al Hamimidi</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="summary">
+      <div class="card">
+        <h2>Project Summary</h2>
+        <p class="lead">
+          This project helps car buyers make smarter financial decisions by looking beyond the listed price of a vehicle.
+          The platform focuses on long-term financial effects like depreciation, insurance-related cost context, and
+          region-based market behavior across California.
+        </p>
+        <p>
+          A major idea behind this project is that vehicle value does not change the same way everywhere. A truck may hold
+          value better in one region while losing value faster in another. Because of that, the website is designed to let
+          users compare depreciation patterns across regions and understand how geography affects the long-term value of a car.
+        </p>
+        <p>
+          The system is also planned to use machine learning to assign each vehicle a depreciation rating out of 5, helping
+          users compare vehicles in a way that is easier to understand.
+        </p>
+        <div class="pill-row">
+          <span class="pill">California market focus</span>
+          <span class="pill">Regional depreciation analysis</span>
+          <span class="pill">Vehicle comparison</span>
+          <span class="pill">ML-based rating system</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="stat-grid">
+        <div class="stat"><strong>8</strong><span>datasets combined for the project</span></div>
+        <div class="stat"><strong>50,614</strong><span>California vehicle listings after filtering</span></div>
+        <div class="stat"><strong>26</strong><span>columns in the original vehicles dataset</span></div>
+        <div class="stat"><strong>5-star</strong><span>planned depreciation rating scale</span></div>
+      </div>
+    </section>
+
+    <section class="section" id="data">
+      <div class="grid-2">
+        <div class="card">
+          <h3>Data Sources</h3>
+          <ol class="clean">
+            <li><strong>vehicles.csv</strong> — Craigslist vehicle listings used for California resale analysis.</li>
+            <li><strong>vehicle fuel-type registration datasets</strong> — annual registration data by zip code and fuel type in California.</li>
+            <li><strong>car_data.csv</strong> — vehicle MSRP and pricing data used to help estimate depreciation behavior.</li>
+            <li><strong>Insurance expenditure data</strong> — state-level cost context for ownership.</li>
+          </ol>
+        </div>
+
+        <div class="card">
+          <h3>Core Features Used</h3>
+          <ul class="clean">
+            <li>Region and zip-code based demand</li>
+            <li>Price, year, and odometer</li>
+            <li>Manufacturer, model, condition, fuel, type, and size</li>
+            <li>Registration trends and geographic market differences</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="findings">
+      <div class="grid-2">
+        <div class="card">
+          <h3>Preliminary Findings</h3>
+          <ul class="clean">
+            <li>Newer vehicles tend to list for higher prices.</li>
+            <li>Higher mileage is linked to lower prices.</li>
+            <li>Top registered brands also appear among the most listed used cars in California.</li>
+            <li>Regional demand likely plays a meaningful role in resale value.</li>
+            <li>Fuel type alone is not enough; vehicle type also matters when studying depreciation.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Questions the Project Tries to Answer</h3>
+          <ul class="clean">
+            <li>How does geography within California affect depreciation?</li>
+            <li>Which vehicle features most influence resale value over time?</li>
+            <li>What combination of price, interest rate, demand, and location gives the best long-term value?</li>
+            <li>Which vehicle segments keep a more stable depreciation curve across regions?</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="impact">
+      <div class="grid-2">
+        <div class="card">
+          <h3>Broader Impacts</h3>
+          <p>
+            This project can help first-time buyers, students, seniors, and budget-conscious families understand the hidden
+            long-term cost of owning a car. It can also help gig drivers and small dealerships make smarter decisions using
+            clearer market signals.
+          </p>
+          <p>
+            By turning complicated financial patterns into simple visual comparisons, the platform supports better planning,
+            better negotiation, and better value for buyers over time.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>GitHub Pages Notes</h3>
+          <p>To publish this on GitHub Pages later, keep the project simple:</p>
+          <ol class="clean">
+            <li>Save this file as <strong>index.html</strong>.</li>
+            <li>Push it to a GitHub repository.</li>
+            <li>Open <strong>Settings → Pages</strong>.</li>
+            <li>Select the main branch and root folder.</li>
+            <li>GitHub will generate your public site link.</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>
+      Built for a class project. Replace this starter text with your final charts, screenshots, and model results before submission.
+    </p>
+  </footer>
+</body>
+</html>
