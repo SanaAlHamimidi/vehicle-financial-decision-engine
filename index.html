@@ -6,15 +6,18 @@
   <title>Vehicle Financial Decision Engine</title>
   <style>
     :root {
-      --bg: #edf3f2;
-      --card: #ffffff;
-      --text: #243f4d;
-      --muted: #4e5f68;
-      --accent1: #214b5b;
-      --accent2: #2e9f96;
-      --border: #dfe8e6;
-      --shadow: 0 10px 25px rgba(22, 42, 51, 0.08);
-      --radius: 18px;
+      --bg: #0b1020;
+      --bg2: #121a30;
+      --panel: rgba(255,255,255,0.08);
+      --panel-solid: #151d35;
+      --text: #f4f7fb;
+      --muted: #c2cbdb;
+      --line: rgba(255,255,255,0.12);
+      --accent: #8b5cf6;
+      --accent2: #22c55e;
+      --accent3: #38bdf8;
+      --shadow: 0 18px 40px rgba(0,0,0,0.28);
+      --radius: 22px;
       --maxw: 1180px;
     }
 
@@ -22,137 +25,240 @@
     html { scroll-behavior: smooth; }
     body {
       margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: var(--bg);
-      color: #1f2933;
-      line-height: 1.6;
+      font-family: Inter, Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(139,92,246,0.22), transparent 28%),
+        radial-gradient(circle at top right, rgba(56,189,248,0.18), transparent 25%),
+        linear-gradient(180deg, var(--bg), var(--bg2));
+      line-height: 1.65;
     }
+
+    a { color: inherit; }
 
     .navbar {
       position: sticky;
       top: 0;
       z-index: 1000;
-      background: rgba(255,255,255,0.96);
-      backdrop-filter: blur(8px);
-      border-bottom: 1px solid var(--border);
+      background: rgba(11,16,32,0.72);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--line);
     }
 
     .nav-inner {
       max-width: var(--maxw);
       margin: 0 auto;
-      padding: 18px 24px;
+      padding: 16px 24px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 24px;
+      gap: 22px;
     }
 
     .brand {
-      font-size: 1.05rem;
       font-weight: 800;
-      color: var(--text);
-      letter-spacing: 0.3px;
+      letter-spacing: 0.4px;
+      font-size: 1.05rem;
     }
 
     .nav-links {
       display: flex;
       flex-wrap: wrap;
-      gap: 26px;
+      gap: 20px;
     }
 
     .nav-links a {
       text-decoration: none;
-      color: var(--text);
-      font-weight: 800;
-      font-size: 0.98rem;
-      letter-spacing: 0.3px;
+      color: var(--muted);
+      font-weight: 700;
+      font-size: 0.95rem;
+      transition: 0.2s ease;
     }
+
+    .nav-links a:hover { color: var(--text); }
 
     .section {
       max-width: var(--maxw);
       margin: 0 auto;
-      padding: 18px 24px 0;
+      padding: 22px 24px 0;
     }
 
     .hero {
-      margin-top: 18px;
-      background: linear-gradient(135deg, var(--accent1), var(--accent2));
-      color: white;
-      border-radius: var(--radius);
-      min-height: 390px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
+      margin-top: 22px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
       box-shadow: var(--shadow);
-      padding: 40px 28px;
+      overflow: hidden;
+      background:
+        linear-gradient(135deg, rgba(139,92,246,0.18), rgba(56,189,248,0.1)),
+        rgba(255,255,255,0.05);
+    }
+
+    .hero-inner {
+      padding: 84px 42px;
+      min-height: 430px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      position: relative;
+    }
+
+    .hero-inner::before,
+    .hero-inner::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      filter: blur(12px);
+      opacity: 0.85;
+    }
+
+    .hero-inner::before {
+      width: 220px;
+      height: 220px;
+      background: rgba(139,92,246,0.24);
+      top: -30px;
+      left: -50px;
+    }
+
+    .hero-inner::after {
+      width: 260px;
+      height: 260px;
+      background: rgba(56,189,248,0.18);
+      bottom: -50px;
+      right: -60px;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 940px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 16px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid var(--line);
+      color: #dce7f9;
+      font-size: 0.92rem;
+      font-weight: 700;
+      letter-spacing: 0.4px;
     }
 
     .hero h1 {
-      margin: 0 0 16px;
-      font-size: clamp(2rem, 5vw, 4rem);
-      line-height: 1.18;
-      font-weight: 800;
+      margin: 0;
+      font-size: clamp(2.3rem, 5vw, 4.7rem);
+      line-height: 1.08;
+      letter-spacing: -1.2px;
     }
 
-    .hero .meta {
-      margin-top: 22px;
-      font-size: 1.1rem;
+    .hero p {
+      margin: 18px auto 0;
+      max-width: 760px;
+      color: #d7e3f4;
+      font-size: 1.08rem;
     }
 
-    .hero .meta p {
-      margin: 8px 0;
+    .hero-meta {
+      margin-top: 26px;
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .hero-badge {
+      padding: 12px 16px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid var(--line);
+      font-weight: 700;
+      color: #edf4ff;
     }
 
     .card {
-      background: var(--card);
-      border: 1px solid var(--border);
+      background: var(--panel);
+      border: 1px solid var(--line);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      padding: 28px 30px;
+      padding: 28px;
       margin: 24px 0;
+      backdrop-filter: blur(12px);
     }
 
-    .card h2 {
-      margin-top: 0;
-      margin-bottom: 18px;
-      color: var(--text);
-      font-size: 2rem;
-      line-height: 1.2;
-    }
-
+    .card h2,
     .card h3 {
-      color: var(--text);
       margin-top: 0;
-      font-size: 1.5rem;
+      margin-bottom: 16px;
+      letter-spacing: -0.4px;
     }
+
+    .card h2 { font-size: 2rem; }
+    .card h3 { font-size: 1.45rem; }
 
     .lead {
-      font-size: 1.05rem;
-      color: #2d3742;
+      font-size: 1.08rem;
+      color: #e4ecf8;
     }
 
     .grid-2 {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 28px;
+      gap: 24px;
     }
 
     .pill-row {
       display: flex;
       flex-wrap: wrap;
       gap: 12px;
-      margin-top: 16px;
+      margin-top: 18px;
     }
 
     .pill {
-      background: #eef7f6;
-      color: var(--text);
-      border: 1px solid #d7e9e6;
-      padding: 8px 14px;
+      padding: 9px 14px;
       border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid var(--line);
+      color: #eef5ff;
       font-weight: 700;
-      font-size: 0.95rem;
+      font-size: 0.93rem;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 4px;
+    }
+
+    .stat {
+      background: linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.05));
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+    }
+
+    .stat span,
+    .card p,
+    .card li {
+      color: var(--muted);
+    }
+
+    .accent-line {
+      height: 4px;
+      width: 88px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent), var(--accent3), var(--accent2));
+      margin-bottom: 18px;
     }
 
     ul.clean, ol.clean {
@@ -160,40 +266,17 @@
       margin: 0;
     }
 
-    .stat-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 16px;
-      margin-top: 18px;
-    }
-
-    .stat {
-      background: #f6fbfa;
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 18px;
-    }
-
-    .stat strong {
-      display: block;
-      font-size: 1.55rem;
-      color: var(--text);
-      margin-bottom: 6px;
-    }
+    li + li { margin-top: 10px; }
 
     .footer {
       max-width: var(--maxw);
-      margin: 10px auto 40px;
+      margin: 18px auto 42px;
       padding: 0 24px;
       color: var(--muted);
       font-size: 0.95rem;
     }
 
-    .footer a {
-      color: var(--text);
-    }
-
-    @media (max-width: 900px) {
+    @media (max-width: 920px) {
       .grid-2, .stat-grid {
         grid-template-columns: 1fr;
       }
@@ -203,12 +286,9 @@
         align-items: flex-start;
       }
 
-      .nav-links {
-        gap: 14px 18px;
-      }
-
-      .hero {
-        min-height: 320px;
+      .hero-inner {
+        padding: 64px 24px;
+        min-height: 360px;
       }
     }
   </style>
@@ -230,11 +310,18 @@
   <main>
     <section class="section" id="home">
       <div class="hero">
-        <div>
-          <h1>Vehicle Financial Decision Engine</h1>
-          <div class="meta">
-            <p><strong>Group ID:</strong> 20</p>
-            <p><strong>Members:</strong> Nyi Wai Yan Tun, Sana Al Hamimidi</p>
+        <div class="hero-inner">
+          <div class="hero-content">
+            <div class="eyebrow">CS Project Website</div>
+            <h1>Vehicle Financial Decision Engine</h1>
+            <p>
+              A data-driven project that helps people make smarter vehicle decisions by studying depreciation,
+              regional market behavior, and long-term financial value.
+            </p>
+            <div class="hero-meta">
+              <div class="hero-badge">Group ID: 20</div>
+              <div class="hero-badge">Members: Nyi Wai Yan Tun, Sana Al Hamimidi</div>
+            </div>
           </div>
         </div>
       </div>
@@ -242,6 +329,7 @@
 
     <section class="section" id="summary">
       <div class="card">
+        <div class="accent-line"></div>
         <h2>Project Summary</h2>
         <p class="lead">
           This project helps car buyers make smarter financial decisions by looking beyond the listed price of a vehicle.
@@ -278,16 +366,18 @@
     <section class="section" id="data">
       <div class="grid-2">
         <div class="card">
+          <div class="accent-line"></div>
           <h3>Data Sources</h3>
           <ol class="clean">
-            <li><strong>vehicles.csv</strong> — Craigslist vehicle listings used for California resale analysis.</li>
-            <li><strong>vehicle fuel-type registration datasets</strong> — annual registration data by zip code and fuel type in California.</li>
-            <li><strong>car_data.csv</strong> — vehicle MSRP and pricing data used to help estimate depreciation behavior.</li>
-            <li><strong>Insurance expenditure data</strong> — state-level cost context for ownership.</li>
+            <li><strong>vehicles.csv</strong> - Craigslist vehicle listings used for California resale analysis.</li>
+            <li><strong>vehicle fuel-type registration datasets</strong> - annual registration data by zip code and fuel type in California.</li>
+            <li><strong>car_data.csv</strong> - vehicle MSRP and pricing data used to help estimate depreciation behavior.</li>
+            <li><strong>Insurance expenditure data</strong> - state-level cost context for ownership.</li>
           </ol>
         </div>
 
         <div class="card">
+          <div class="accent-line"></div>
           <h3>Core Features Used</h3>
           <ul class="clean">
             <li>Region and zip-code based demand</li>
@@ -302,6 +392,7 @@
     <section class="section" id="findings">
       <div class="grid-2">
         <div class="card">
+          <div class="accent-line"></div>
           <h3>Preliminary Findings</h3>
           <ul class="clean">
             <li>Newer vehicles tend to list for higher prices.</li>
@@ -313,6 +404,7 @@
         </div>
 
         <div class="card">
+          <div class="accent-line"></div>
           <h3>Questions the Project Tries to Answer</h3>
           <ul class="clean">
             <li>How does geography within California affect depreciation?</li>
@@ -327,6 +419,7 @@
     <section class="section" id="impact">
       <div class="grid-2">
         <div class="card">
+          <div class="accent-line"></div>
           <h3>Broader Impacts</h3>
           <p>
             This project can help first-time buyers, students, seniors, and budget-conscious families understand the hidden
@@ -339,7 +432,7 @@
           </p>
         </div>
 
-       
+     
   <footer class="footer">
     <p>
       
@@ -347,3 +440,4 @@
   </footer>
 </body>
 </html>
+
