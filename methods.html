@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Analytical Methods — Vehicle Financial Decision Engine</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #080c18;
+      --panel: rgba(255,255,255,0.05);
+      --text: #f0f4ff;
+      --muted: #8b9cc8;
+      --line: rgba(255,255,255,0.08);
+      --accent: #6366f1;
+      --accent2: #10b981;
+      --accent3: #f59e0b;
+      --radius: 20px;
+      --maxw: 1200px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif; font-weight: 300;
+      color: var(--text); background: var(--bg); line-height: 1.7;
+    }
+    body::before {
+      content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background:
+        radial-gradient(ellipse at 10% 20%, rgba(99,102,241,0.12) 0%, transparent 50%),
+        radial-gradient(ellipse at 90% 80%, rgba(16,185,129,0.08) 0%, transparent 50%);
+      pointer-events: none; z-index: 0;
+    }
+    .navbar {
+      position: sticky; top: 0; z-index: 1000;
+      background: rgba(8,12,24,0.85); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav-inner {
+      max-width: var(--maxw); margin: 0 auto; padding: 18px 32px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .brand {
+      font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 1.1rem;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 28px; }
+    .nav-links a {
+      text-decoration: none; color: var(--muted);
+      font-size: 0.9rem; font-weight: 400; transition: color 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--text); }
+    .section {
+      max-width: var(--maxw); margin: 0 auto;
+      padding: 60px 32px; position: relative; z-index: 1;
+    }
+    .page-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 600; letter-spacing: -1px; margin-bottom: 8px;
+    }
+    .page-sub { color: var(--muted); font-size: 1rem; margin-bottom: 48px; }
+    .card {
+      background: var(--panel); border: 1px solid var(--line);
+      border-radius: var(--radius); padding: 32px; margin-bottom: 16px;
+    }
+    .card h2 {
+      font-family: 'Outfit', sans-serif; font-size: 1.4rem;
+      font-weight: 600; margin-bottom: 16px;
+    }
+    .card h3 {
+      font-family: 'Outfit', sans-serif; font-size: 1.1rem;
+      font-weight: 500; margin-bottom: 10px; color: var(--text);
+    }
+    .card p { color: var(--muted); font-size: 0.95rem; margin-bottom: 12px; }
+    .card ul, .card ol {
+      color: var(--muted); font-size: 0.95rem;
+      padding-left: 20px; line-height: 2;
+    }
+    .divider { height: 1px; background: var(--line); margin: 24px 0; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .method-card {
+      border-radius: 16px; padding: 24px; margin-bottom: 16px;
+    }
+    .method-card.purple {
+      background: rgba(99,102,241,0.08); border: 1px solid rgba(99,102,241,0.2);
+    }
+    .method-card.green {
+      background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.2);
+    }
+    .method-card.amber {
+      background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.2);
+    }
+    .method-card.red {
+      background: rgba(239,68,68,0.06); border: 1px solid rgba(239,68,68,0.15);
+    }
+    .method-card h3 {
+      font-family: 'Outfit', sans-serif; font-size: 1.1rem;
+      font-weight: 500; margin-bottom: 8px;
+    }
+    .method-card p { color: var(--muted); font-size: 0.92rem; margin-bottom: 8px; }
+    .method-card ul { color: var(--muted); font-size: 0.88rem; padding-left: 18px; line-height: 1.9; }
+    .pill {
+      display: inline-block; padding: 4px 10px; border-radius: 999px;
+      font-size: 0.8rem; margin-right: 6px; margin-bottom: 6px;
+    }
+    .pill.purple { background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.2); color: #a5b4fc; }
+    .pill.green { background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.2); color: #6ee7b7; }
+    .pill.amber { background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.2); color: #fcd34d; }
+    .pipeline-step {
+      display: flex; gap: 20px; padding: 20px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .pipeline-step:last-child { border-bottom: none; }
+    .step-num {
+      font-family: 'Outfit', sans-serif; font-size: 1.6rem;
+      font-weight: 600; color: rgba(99,102,241,0.4);
+      min-width: 36px; line-height: 1; padding-top: 2px;
+    }
+    .step-content strong { display: block; font-weight: 500; margin-bottom: 4px; }
+    .step-content p { color: var(--muted); font-size: 0.92rem; }
+    .io-box {
+      background: rgba(255,255,255,0.03); border: 1px solid var(--line);
+      border-radius: 10px; padding: 12px 16px; margin-top: 10px; font-size: 0.88rem;
+    }
+    .io-box span { color: var(--muted); }
+    .io-box strong { color: var(--accent2); }
+    footer {
+      max-width: var(--maxw); margin: 0 auto 32px;
+      padding: 24px 32px; border-top: 1px solid var(--line);
+      display: flex; justify-content: space-between;
+      color: var(--muted); font-size: 0.88rem;
+      position: relative; z-index: 1;
+    }
+    @media (max-width: 768px) {
+      .grid-2 { grid-template-columns: 1fr; }
+      .nav-inner { flex-direction: column; gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="brand">Vehicle Financial Decision Engine</a>
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="objectives.html">Objectives</a>
+        <a href="methods.html" class="active">Methods</a>
+        <a href="findings.html">Findings</a>
+        <a href="index.html#predict">Predict</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="page-title">Analytical <span style="background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Methods</span></div>
+      <div class="page-sub">Techniques, models, and feature engineering pipeline</div>
+
+      <!-- PIPELINE -->
+      <div class="card">
+        <h2>🔄 Analysis Pipeline</h2>
+        <div class="pipeline-step">
+          <div class="step-num">01</div>
+          <div class="step-content">
+            <strong>Data Collection & Integration</strong>
+            <p>Eight datasets were combined — Craigslist vehicle listings, six years of California DMV registration records by ZIP code and fuel type, and a vehicle MSRP reference dataset. Total data volume: 3.6 million registration records and 50,614 California vehicle listings.</p>
+          </div>
+        </div>
+        <div class="pipeline-step">
+          <div class="step-num">02</div>
+          <div class="step-content">
+            <strong>Preprocessing & Cleaning</strong>
+            <p>Outlier removal (price $500–$150,000, odometer 1,000–300,000 miles, year ≥ 2000), null handling, duplicate removal, and column standardization across datasets with inconsistent naming conventions.</p>
+          </div>
+        </div>
+        <div class="pipeline-step">
+          <div class="step-num">03</div>
+          <div class="step-content">
+            <strong>Geographic Feature Engineering — Demand Score</strong>
+            <p>ZIP codes in the registration dataset were mapped to California regions using pgeocode reverse geocoding and a manual county-to-region mapping. Registrations were then aggregated by region, make, and fuel type across all six years and normalized to a 0–1 demand score.</p>
+          </div>
+        </div>
+        <div class="pipeline-step">
+          <div class="step-num">04</div>
+          <div class="step-content">
+            <strong>Depreciation Rate Calculation</strong>
+            <p>Average MSRP was calculated per make and year from the reference dataset. For makes not present in the MSRP dataset, proxy brands were assigned based on market segment similarity. Depreciation rate was computed as (avg_msrp − current_price) / avg_msrp.</p>
+          </div>
+        </div>
+        <div class="pipeline-step">
+          <div class="step-num">05</div>
+          <div class="step-content">
+            <strong>Modeling & Evaluation</strong>
+            <p>XGBoost regressor trained on 80% of 37,991 cleaned listings and evaluated on the remaining 20%. K-Means clustering applied to discover natural depreciation profiles. Feature importance extracted to validate findings.</p>
+          </div>
+        </div>
+        <div class="pipeline-step">
+          <div class="step-num">06</div>
+          <div class="step-content">
+            <strong>Deployment</strong>
+            <p>Flask API containerized with Docker and deployed to Google Cloud Run. Website hosted on Google App Engine. Model artifacts and lookup tables stored in Google Cloud Storage.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ML METHODS -->
+      <div class="card">
+        <h2>🤖 Machine Learning Methods</h2>
+
+        <div class="method-card purple">
+          <h3>XGBoost Regressor — Price Prediction</h3>
+          <p>Gradient boosting ensemble method that builds decision trees sequentially, each correcting errors of the previous. Selected for its strong performance on tabular data with mixed feature types, robustness to outliers, and interpretable feature importance scores.</p>
+          <div class="io-box">
+            <span>Input: </span> year, odometer, manufacturer, condition, fuel, type, region, demand_score<br>
+            <strong>Output: </strong> predicted resale price ($)
+          </div>
+          <div style="margin-top: 12px;">
+            <span class="pill purple">n_estimators: 100</span>
+            <span class="pill purple">max_depth: 6</span>
+            <span class="pill purple">learning_rate: 0.1</span>
+            <span class="pill purple">subsample: 0.8</span>
+            <span class="pill purple">colsample_bytree: 0.8</span>
+          </div>
+        </div>
+
+        <div class="method-card green">
+          <h3>K-Means Clustering — Depreciation Profiles</h3>
+          <p>Unsupervised clustering applied to avg_msrp, depreciation_rate, odometer, and year to discover natural vehicle depreciation tiers. Features were standardized using StandardScaler before clustering to ensure equal contribution. Optimal K=5 selected using the elbow method.</p>
+          <div class="io-box">
+            <span>Input: </span> avg_msrp, depreciation_rate, odometer, year<br>
+            <strong>Output: </strong> cluster label (1–5 depreciation tier)
+          </div>
+          <div style="margin-top: 12px;">
+            <span class="pill green">K = 5 clusters</span>
+            <span class="pill green">Euclidean distance</span>
+            <span class="pill green">StandardScaler</span>
+            <span class="pill green">n_init = 10</span>
+          </div>
+        </div>
+
+        <div class="method-card amber">
+          <h3>Demand Score — Feature Engineering</h3>
+          <p>Geographic demand was not directly measurable from listing data alone. A proxy demand signal was engineered from six years of California DMV registration records by aggregating vehicle counts per region, make, and fuel type, then normalizing to a 0–1 scale.</p>
+          <div class="io-box">
+            <span>Input: </span> region + make + fuel type from registration data<br>
+            <strong>Output: </strong> demand_score ∈ [0, 1]
+          </div>
+          <div style="margin-top: 12px;">
+            <span class="pill amber">6 years of data</span>
+            <span class="pill amber">29 CA regions</span>
+            <span class="pill amber">pgeocode ZIP mapping</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- EDA METHODS -->
+      <div class="card">
+        <h2>📊 Exploratory Data Analysis</h2>
+        <div class="grid-2">
+          <div>
+            <h3 style="margin-bottom: 12px;">Statistical Analysis</h3>
+            <ul>
+              <li>Descriptive statistics — mean, median, std, range</li>
+              <li>Pearson correlation matrix for numeric features</li>
+              <li>Distribution analysis — price, odometer, year</li>
+              <li>Missing value analysis and outlier detection</li>
+              <li>Label encoding for categorical feature correlation</li>
+            </ul>
+          </div>
+          <div>
+            <h3 style="margin-bottom: 12px;">Visualizations Produced</h3>
+            <ul>
+              <li>Hexbin plots — price vs odometer density</li>
+              <li>Correlation heatmap — numeric features</li>
+              <li>Boxplots — price by manufacturer and condition</li>
+              <li>Line charts — fuel type registration trends 2019–2024</li>
+              <li>Bar charts — depreciation by brand and region</li>
+              <li>Elbow method — optimal K for clustering</li>
+              <li>Actual vs predicted scatter plot</li>
+              <li>Feature importance bar chart</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- DEPLOYMENT -->
+      <div class="card">
+        <h2>☁️ System Architecture & Deployment</h2>
+        <div class="grid-2">
+          <div>
+            <h3 style="margin-bottom: 12px;">Infrastructure</h3>
+            <ul>
+              <li><strong style="color: var(--text);">Model Training:</strong> Google Colab (Python, XGBoost, scikit-learn, pandas)</li>
+              <li><strong style="color: var(--text);">Inference API:</strong> Flask + Gunicorn, containerized with Docker, deployed on Google Cloud Run</li>
+              <li><strong style="color: var(--text);">Storage:</strong> Google Cloud Storage — model pkl, encoders, demand lookup</li>
+              <li><strong style="color: var(--text);">Website:</strong> Static HTML/CSS/JS hosted on Google App Engine</li>
+            </ul>
+          </div>
+          <div>
+            <h3 style="margin-bottom: 12px;">API Endpoints</h3>
+            <div class="io-box" style="margin-bottom: 10px;">
+              <strong>POST /predict</strong><br>
+              <span>Input: manufacturer, year, odometer, condition, fuel, type, region</span><br>
+              <span>Output: predicted_price, demand_score</span>
+            </div>
+            <div class="io-box">
+              <strong>GET /health</strong><br>
+              <span>Health check endpoint for Cloud Run</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LIMITATIONS -->
+      <div class="card">
+        <h2>⚠️ Methodological Limitations</h2>
+        <div class="grid-2">
+          <div>
+            <h3 style="margin-bottom: 10px;">Data Limitations</h3>
+            <ul>
+              <li>Craigslist listings represent private sellers only — dealer and auction markets excluded</li>
+              <li>Brand-level MSRP averaging may inflate depreciation for economy brands proxied to more expensive makes</li>
+              <li>MSRP dataset covers 13 brands — 26 brands use proxy values from similar market segments</li>
+              <li>ZIP-to-region mapping uses county-level approximation</li>
+            </ul>
+          </div>
+          <div>
+            <h3 style="margin-bottom: 10px;">Model Limitations</h3>
+            <ul>
+              <li>R² of 0.779 — 22% of price variation remains unexplained</li>
+              <li>Model struggles with high-priced vehicles above $50,000 due to fewer training examples</li>
+              <li>Label encoding introduces implicit ordinal relationships in categorical features</li>
+              <li>No temporal tracking — model reflects a single market snapshot</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <footer>
+    <span>CS163 Senior Project · Group 20 · Nyi Wai Yan Tun & Sana Al Hamimidi</span>
+    <span>San José State University · Spring 2026</span>
+  </footer>
+</body>
+</html>

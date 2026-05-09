@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project Objectives — Vehicle Financial Decision Engine</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #080c18;
+      --panel: rgba(255,255,255,0.05);
+      --text: #f0f4ff;
+      --muted: #8b9cc8;
+      --line: rgba(255,255,255,0.08);
+      --accent: #6366f1;
+      --accent2: #10b981;
+      --radius: 20px;
+      --maxw: 1200px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.7;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background:
+        radial-gradient(ellipse at 10% 20%, rgba(99,102,241,0.12) 0%, transparent 50%),
+        radial-gradient(ellipse at 90% 80%, rgba(16,185,129,0.08) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .navbar {
+      position: sticky; top: 0; z-index: 1000;
+      background: rgba(8,12,24,0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav-inner {
+      max-width: var(--maxw); margin: 0 auto;
+      padding: 18px 32px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .brand {
+      font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 1.1rem;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 28px; }
+    .nav-links a {
+      text-decoration: none; color: var(--muted);
+      font-size: 0.9rem; font-weight: 400; transition: color 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--text); }
+    .section {
+      max-width: var(--maxw); margin: 0 auto;
+      padding: 60px 32px; position: relative; z-index: 1;
+    }
+    .page-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 600; letter-spacing: -1px;
+      margin-bottom: 8px;
+    }
+    .page-sub { color: var(--muted); font-size: 1rem; margin-bottom: 48px; }
+    .card {
+      background: var(--panel); border: 1px solid var(--line);
+      border-radius: var(--radius); padding: 32px; margin-bottom: 16px;
+    }
+    .card h2 {
+      font-family: 'Outfit', sans-serif; font-size: 1.4rem;
+      font-weight: 600; margin-bottom: 16px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .card h3 {
+      font-family: 'Outfit', sans-serif; font-size: 1.1rem;
+      font-weight: 500; margin-bottom: 10px; color: var(--text);
+    }
+    .card p { color: var(--muted); font-size: 0.95rem; margin-bottom: 12px; }
+    .card ul, .card ol {
+      color: var(--muted); font-size: 0.95rem;
+      padding-left: 20px; line-height: 2;
+    }
+    .divider { height: 1px; background: var(--line); margin: 32px 0; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .dataset-card {
+      background: rgba(99,102,241,0.06);
+      border: 1px solid rgba(99,102,241,0.15);
+      border-radius: 14px; padding: 20px;
+    }
+    .dataset-card h3 { font-family: 'Outfit', sans-serif; font-size: 1rem; font-weight: 500; margin-bottom: 8px; }
+    .dataset-card p { color: var(--muted); font-size: 0.88rem; line-height: 1.6; }
+    .tag {
+      display: inline-block; padding: 4px 10px;
+      border-radius: 999px; font-size: 0.8rem; font-weight: 400;
+      background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.2);
+      color: #6ee7b7; margin-bottom: 10px;
+    }
+    .question-item {
+      display: flex; gap: 16px; padding: 16px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .question-item:last-child { border-bottom: none; }
+    .q-num {
+      font-family: 'Outfit', sans-serif; font-size: 1.8rem;
+      font-weight: 600; color: rgba(99,102,241,0.3);
+      min-width: 40px; line-height: 1; padding-top: 4px;
+    }
+    .q-text strong { display: block; font-weight: 500; margin-bottom: 4px; }
+    .q-text p { color: var(--muted); font-size: 0.92rem; }
+    footer {
+      max-width: var(--maxw); margin: 0 auto 32px;
+      padding: 24px 32px; border-top: 1px solid var(--line);
+      display: flex; justify-content: space-between;
+      color: var(--muted); font-size: 0.88rem;
+      position: relative; z-index: 1;
+    }
+    @media (max-width: 768px) {
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+      .nav-inner { flex-direction: column; gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="brand">Vehicle Financial Decision Engine</a>
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="objectives.html" class="active">Objectives</a>
+        <a href="methods.html">Methods</a>
+        <a href="findings.html">Findings</a>
+        <a href="index.html#predict">Predict</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="page-title">Project <span style="background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Objectives</span></div>
+      <div class="page-sub">Goals, research questions, and data sources</div>
+
+      <!-- MOTIVATION -->
+      <div class="card">
+        <h2>🎯 Motivation</h2>
+        <p>
+          The decision to purchase a vehicle is one of the most significant financial commitments an individual makes — yet most buyers lack access to tools that transparently quantify the long-term financial implications of that decision. This project was motivated by a personal experience of purchasing a car without fully understanding the financial ripple effect of vehicle depreciation.
+        </p>
+        <p>
+          Beyond individual depreciation, California's used car market is undergoing a structural shift driven by the rapid adoption of electric vehicles. A gasoline vehicle purchased today is entering a market that is increasingly moving away from it — a dynamic that existing depreciation calculators do not adequately capture.
+        </p>
+        <p>
+          This project aims to build a data-driven tool that helps California vehicle owners make more informed financial decisions about buying, holding, and selling their vehicles.
+        </p>
+      </div>
+
+      <!-- RESEARCH QUESTIONS -->
+      <div class="card">
+        <h2>🔍 Research Questions</h2>
+        <p style="margin-bottom: 20px;">Three key research questions guide this analysis:</p>
+        <div class="question-item">
+          <div class="q-num">01</div>
+          <div class="q-text">
+            <strong>Which vehicle features affect resale price the most?</strong>
+            <p>We investigate which characteristics — age, mileage, condition, fuel type, brand, and vehicle type — are the strongest predictors of used car resale price in the California market.</p>
+          </div>
+        </div>
+        <div class="question-item">
+          <div class="q-num">02</div>
+          <div class="q-text">
+            <strong>How does geography in California affect resale value?</strong>
+            <p>We examine whether location independently influences resale value beyond vehicle characteristics, and whether regional demand — captured from DMV registration data — provides a meaningful signal for depreciation rates.</p>
+          </div>
+        </div>
+        <div class="question-item">
+          <div class="q-num">03</div>
+          <div class="q-text">
+            <strong>Does selling the same vehicle across California regions yield different resale prices?</strong>
+            <p>We test whether the same vehicle with identical features commands meaningfully different prices in different California regions, and identify which regions offer the highest potential return for sellers.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- DATA SOURCES -->
+      <div class="card">
+        <h2>📦 Data Sources</h2>
+        <p style="margin-bottom: 24px;">This project combines 8 datasets totaling over 3.6 million records across three categories:</p>
+
+        <div class="grid-3">
+          <div class="dataset-card">
+            <div class="tag">Vehicle Listings</div>
+            <h3>vehicles.csv</h3>
+            <p>Craigslist used car listings scraped across the US. Filtered to 50,614 California listings with 26 features including price, year, manufacturer, model, condition, fuel type, odometer, and region.</p>
+          </div>
+          <div class="dataset-card">
+            <div class="tag">Registration Data</div>
+            <h3>vehicle-fuel-type-count CSVs (×6)</h3>
+            <p>California DMV vehicle registration data from 2019 to 2024, broken down by ZIP code, fuel type, and make. Combined into 3.6 million rows. Used to engineer the regional demand feature.</p>
+          </div>
+          <div class="dataset-card">
+            <div class="tag">MSRP Reference</div>
+            <h3>car_data.csv</h3>
+            <p>Vehicle MSRP values across multiple brands and years. Used as the original price reference for calculating depreciation rates. Contains approximately 100,000 listings across 13 brands.</p>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <h3 style="margin-bottom: 12px;">Target Variable & Features of Interest</h3>
+        <div class="grid-2">
+          <div>
+            <p style="margin-bottom: 8px;"><strong style="color: var(--text);">Target Variable:</strong></p>
+            <p>Price — the current resale listing price of a used vehicle in California</p>
+          </div>
+          <div>
+            <p style="margin-bottom: 8px;"><strong style="color: var(--text);">Key Features:</strong></p>
+            <p>Year, odometer, manufacturer, condition, fuel type, vehicle type, region, engineered demand score</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROJECT SCOPE -->
+      <div class="card">
+        <h2>🗺️ Project Scope</h2>
+        <div class="grid-2">
+          <div>
+            <h3 style="margin-bottom: 10px;">In Scope</h3>
+            <ul>
+              <li>California used car market only</li>
+              <li>Personal use vehicles (not commercial)</li>
+              <li>Vehicles manufactured from 2000 onwards</li>
+              <li>Price range $500 to $150,000</li>
+              <li>29 California regions covered</li>
+              <li>6 years of registration data (2019–2024)</li>
+            </ul>
+          </div>
+          <div>
+            <h3 style="margin-bottom: 10px;">Out of Scope</h3>
+            <ul>
+              <li>Dealer or auction market pricing</li>
+              <li>Commercial or fleet vehicles</li>
+              <li>Vehicles outside California</li>
+              <li>Real-time market data</li>
+              <li>Insurance or maintenance cost modeling</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <footer>
+    <span>CS163 Senior Project · Group 20 · Nyi Wai Yan Tun & Sana Al Hamimidi</span>
+    <span>San José State University · Spring 2026</span>
+  </footer>
+</body>
+</html>

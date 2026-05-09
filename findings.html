@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Major Findings — Vehicle Financial Decision Engine</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --bg: #080c18;
+      --panel: rgba(255,255,255,0.05);
+      --text: #f0f4ff;
+      --muted: #8b9cc8;
+      --line: rgba(255,255,255,0.08);
+      --accent: #6366f1;
+      --accent2: #10b981;
+      --accent3: #f59e0b;
+      --accent4: #ef4444;
+      --radius: 20px;
+      --maxw: 1200px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif; font-weight: 300;
+      color: var(--text); background: var(--bg); line-height: 1.7;
+    }
+    body::before {
+      content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background:
+        radial-gradient(ellipse at 10% 20%, rgba(99,102,241,0.12) 0%, transparent 50%),
+        radial-gradient(ellipse at 90% 80%, rgba(16,185,129,0.08) 0%, transparent 50%);
+      pointer-events: none; z-index: 0;
+    }
+    .navbar {
+      position: sticky; top: 0; z-index: 1000;
+      background: rgba(8,12,24,0.85); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav-inner {
+      max-width: var(--maxw); margin: 0 auto; padding: 18px 32px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .brand {
+      font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 1.1rem;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 28px; }
+    .nav-links a {
+      text-decoration: none; color: var(--muted);
+      font-size: 0.9rem; font-weight: 400; transition: color 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--text); }
+    .section {
+      max-width: var(--maxw); margin: 0 auto;
+      padding: 60px 32px; position: relative; z-index: 1;
+    }
+    .page-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 600; letter-spacing: -1px; margin-bottom: 8px;
+    }
+    .page-sub { color: var(--muted); font-size: 1rem; margin-bottom: 48px; }
+    .card {
+      background: var(--panel); border: 1px solid var(--line);
+      border-radius: var(--radius); padding: 32px; margin-bottom: 16px;
+    }
+    .card h2 {
+      font-family: 'Outfit', sans-serif; font-size: 1.4rem;
+      font-weight: 600; margin-bottom: 8px;
+    }
+    .card h3 {
+      font-family: 'Outfit', sans-serif; font-size: 1.1rem;
+      font-weight: 500; margin-bottom: 10px;
+    }
+    .card p { color: var(--muted); font-size: 0.95rem; margin-bottom: 12px; }
+    .card ul { color: var(--muted); font-size: 0.95rem; padding-left: 20px; line-height: 2; }
+    .divider { height: 1px; background: var(--line); margin: 24px 0; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .finding-item {
+      display: flex; gap: 16px; padding: 16px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .finding-item:last-child { border-bottom: none; }
+    .finding-num {
+      font-family: 'Outfit', sans-serif; font-size: 1.8rem;
+      font-weight: 600; color: rgba(99,102,241,0.3);
+      min-width: 40px; line-height: 1; padding-top: 4px;
+    }
+    .finding-text strong { display: block; font-weight: 500; margin-bottom: 4px; }
+    .finding-text p { color: var(--muted); font-size: 0.92rem; }
+    .chart-wrapper {
+      position: relative; padding: 24px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--line); border-radius: 16px; margin-top: 16px;
+    }
+    .chart-label {
+      text-align: center; color: var(--muted);
+      font-size: 0.88rem; margin-top: 12px;
+    }
+    .img-chart {
+      width: 100%; border-radius: 12px;
+      border: 1px solid var(--line); background: white;
+    }
+    .stat-row {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 20px 0;
+    }
+    .stat-box {
+      background: rgba(99,102,241,0.08); border: 1px solid rgba(99,102,241,0.2);
+      border-radius: 14px; padding: 20px; text-align: center;
+    }
+    .stat-box strong {
+      display: block; font-family: 'Outfit', sans-serif;
+      font-size: 1.8rem; font-weight: 600; color: #a5b4fc; margin-bottom: 6px;
+    }
+    .stat-box span { color: var(--muted); font-size: 0.88rem; }
+    .cluster-grid {
+      display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 16px;
+    }
+    .cluster-box {
+      border-radius: 12px; padding: 16px; text-align: center;
+    }
+    .cluster-box .stars { font-size: 1rem; margin-bottom: 8px; }
+    .cluster-box strong { display: block; font-size: 0.88rem; font-weight: 500; margin-bottom: 4px; }
+    .cluster-box span { font-size: 0.8rem; color: var(--muted); }
+    footer {
+      max-width: var(--maxw); margin: 0 auto 32px;
+      padding: 24px 32px; border-top: 1px solid var(--line);
+      display: flex; justify-content: space-between;
+      color: var(--muted); font-size: 0.88rem;
+      position: relative; z-index: 1;
+    }
+    @media (max-width: 768px) {
+      .grid-2, .stat-row, .cluster-grid { grid-template-columns: 1fr; }
+      .nav-inner { flex-direction: column; gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="brand">Vehicle Financial Decision Engine</a>
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="objectives.html">Objectives</a>
+        <a href="methods.html">Methods</a>
+        <a href="findings.html" class="active">Findings</a>
+        <a href="index.html#predict">Predict</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="page-title">Major <span style="background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Findings</span></div>
+      <div class="page-sub">Key results addressing our three research questions</div>
+
+      <!-- Q1 -->
+      <div class="card">
+        <h2>Q1 — Which vehicle features affect resale price the most?</h2>
+        <p style="margin-bottom: 20px;">XGBoost feature importance and correlation analysis reveal the relative contribution of each feature to resale price prediction.</p>
+
+        <div class="stat-row">
+          <div class="stat-box">
+            <strong>0.779</strong>
+            <span>R² Score — model explains 77.9% of price variation</span>
+          </div>
+          <div class="stat-box">
+            <strong>$5,891</strong>
+            <span>RMSE — average prediction error</span>
+          </div>
+          <div class="stat-box">
+            <strong>27%</strong>
+            <span>Fuel type importance — the top predictor</span>
+          </div>
+        </div>
+
+        <div class="finding-item">
+          <div class="finding-num">01</div>
+          <div class="finding-text">
+            <strong>Fuel type is the strongest predictor at 27% importance</strong>
+            <p>Diesel vehicles average $32,001 — the highest of any fuel type — driven by truck dominance in that category. This reveals that fuel type alone is not a clean signal without controlling for vehicle type.</p>
+          </div>
+        </div>
+        <div class="finding-item">
+          <div class="finding-num">02</div>
+          <div class="finding-text">
+            <strong>Year (0.59 correlation) and odometer (-0.58) are strong secondary drivers</strong>
+            <p>Confirming that vehicle age and mileage are the primary depreciation drivers. Together with fuel type they account for over 70% of the model's predictive power.</p>
+          </div>
+        </div>
+        <div class="finding-item">
+          <div class="finding-num">03</div>
+          <div class="finding-text">
+            <strong>Condition has a sharp impact at the low end</strong>
+            <p>New condition averages $24,561 while fair condition averages only $3,796 — an 85% drop. The financial penalty for poor condition is severe and non-linear.</p>
+          </div>
+        </div>
+
+        <div class="grid-2" style="margin-top: 20px;">
+          <div>
+            <img src="feature_importance.png" alt="Feature Importance" class="img-chart" onerror="this.style.display='none'">
+            <div class="chart-label">Fig 1. XGBoost Feature Importance</div>
+          </div>
+          <div>
+            <img src="actual_vs_predicted.png" alt="Actual vs Predicted" class="img-chart" onerror="this.style.display='none'">
+            <div class="chart-label">Fig 2. Actual vs Predicted Price — R² = 0.779</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q2 -->
+      <div class="card">
+        <h2>Q2 — How does geography in California affect resale value?</h2>
+        <p style="margin-bottom: 20px;">Regional depreciation rates reveal significant geographic variation in how vehicles hold value across California.</p>
+
+        <div class="finding-item">
+          <div class="finding-num">04</div>
+          <div class="finding-text">
+            <strong>Siskiyou County has the highest depreciation rate at 0.61</strong>
+            <p>Remote rural areas with limited demand show the fastest value loss. Palm Springs (0.44) and Inland Empire (0.41) follow, driven by high supply and market competition in those areas.</p>
+          </div>
+        </div>
+        <div class="finding-item">
+          <div class="finding-num">05</div>
+          <div class="finding-text">
+            <strong>Agricultural regions show the lowest depreciation — Imperial County actually appreciates at -0.10</strong>
+            <p>Bakersfield (0.08) and Visalia-Tulare (0.13) also show near-zero depreciation. High demand for work trucks in agricultural communities drives prices above average MSRP.</p>
+          </div>
+        </div>
+        <div class="finding-item">
+          <div class="finding-num">06</div>
+          <div class="finding-text">
+            <strong>SF Bay Area sits in the middle at 0.31 despite high EV adoption</strong>
+            <p>The high volume of listings in the Bay Area creates competitive pricing pressure that offsets the area's high income levels, resulting in moderate rather than low depreciation rates.</p>
+          </div>
+        </div>
+
+        <!-- INTERACTIVE CHART -->
+        <div class="chart-wrapper">
+          <canvas id="depreciation-chart" height="350"></canvas>
+          <div class="chart-label">Fig 3. Average Depreciation Rate by California Region — hover over bars for values</div>
+        </div>
+      </div>
+
+      <!-- Q3 -->
+      <div class="card">
+        <h2>Q3 — Does selling the same vehicle across regions yield different prices?</h2>
+        <p style="margin-bottom: 20px;">Analysis of truck resale prices by region reveals substantial geographic price variation for identical vehicle brands.</p>
+
+        <div class="finding-item">
+          <div class="finding-num">07</div>
+          <div class="finding-text">
+            <strong>Same brand truck, $28,000 price difference by region</strong>
+            <p>A Chevrolet truck in Imperial County averages $45,645 while the same brand in Los Angeles averages $17,095 — a difference of $28,550 for the same manufacturer. Geography is a significant financial variable for sellers.</p>
+          </div>
+        </div>
+        <div class="finding-item">
+          <div class="finding-num">08</div>
+          <div class="finding-text">
+            <strong>Central Valley regions consistently outperform urban areas for truck resale</strong>
+            <p>Hanford-Corcoran ($43,000), Bakersfield ($29,662), and Visalia-Tulare ($28,248) rank highest for truck resale prices. Agricultural demand for work vehicles sustains premium pricing in these markets.</p>
+          </div>
+        </div>
+        <div class="finding-item">
+          <div class="finding-num">09</div>
+          <div class="finding-text">
+            <strong>Urban markets have higher supply and lower truck resale prices</strong>
+            <p>Los Angeles ($17,095), Modesto ($18,760), and Inland Empire ($20,005) rank lowest for truck resale. More listings means more competition which drives prices down regardless of brand.</p>
+          </div>
+        </div>
+        <div class="finding-item">
+          <div class="finding-num">10</div>
+          <div class="finding-text">
+            <strong>Use the Predict tool to see this effect for your specific vehicle</strong>
+            <p>The regional comparison feature on the prediction page automatically calculates your vehicle's estimated value across 8 California regions simultaneously, helping you identify the highest return market for your specific car.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- BONUS FINDINGS -->
+      <div class="card">
+        <h2>📌 Additional Findings</h2>
+        <div class="grid-2">
+          <div>
+            <h3 style="margin-bottom: 12px;">Brand Depreciation Patterns</h3>
+            <div class="finding-item" style="padding: 10px 0;">
+              <div class="finding-text">
+                <strong>Discontinued brands depreciate fastest</strong>
+                <p>Mercury (0.84), Pontiac (0.79), Saturn (0.78) — no manufacturer support accelerates value loss.</p>
+              </div>
+            </div>
+            <div class="finding-item" style="padding: 10px 0;">
+              <div class="finding-text">
+                <strong>Tesla holds value best among passenger cars</strong>
+                <p>Depreciation rate of 0.08 — reflecting strong California EV demand and brand loyalty.</p>
+              </div>
+            </div>
+            <div class="finding-item" style="padding: 10px 0; border-bottom: none;">
+              <div class="finding-text">
+                <strong>Trucks appreciate — RAM at 0.005, F-150 at 0.16</strong>
+                <p>Post-2020 supply chain disruptions drove used truck prices above original MSRP in many cases.</p>
+              </div>
+            </div>
+          </div>
+          <div>
+            <h3 style="margin-bottom: 12px;">EV Market Shift (2019–2024)</h3>
+            <div class="finding-item" style="padding: 10px 0;">
+              <div class="finding-text">
+                <strong>Battery Electric registrations grew 6x</strong>
+                <p>From 226,614 in 2019 to 1,459,536 in 2024 — California's EV transition is accelerating.</p>
+              </div>
+            </div>
+            <div class="finding-item" style="padding: 10px 0;">
+              <div class="finding-text">
+                <strong>Gasoline registrations declined by 2.25 million</strong>
+                <p>From 26.9M in 2019 to 24.7M in 2024. Buying gasoline today means entering a shrinking market.</p>
+              </div>
+            </div>
+            <div class="finding-item" style="padding: 10px 0; border-bottom: none;">
+              <div class="finding-text">
+                <strong>5 depreciation clusters discovered by K-Means</strong>
+                <p>From appreciating vehicles (-20%) to severely depreciating ones (71%), data-driven tiers emerge naturally from the market data.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <h3 style="margin-bottom: 12px;">K-Means Depreciation Clusters</h3>
+        <div class="cluster-grid">
+          <div class="cluster-box" style="background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.2);">
+            <div class="stars">⭐⭐⭐⭐⭐</div>
+            <strong>Appreciating</strong>
+            <span>-20% · Trucks · 2014 avg · 60k mi</span>
+          </div>
+          <div class="cluster-box" style="background: rgba(99,102,241,0.08); border: 1px solid rgba(99,102,241,0.2);">
+            <div class="stars">⭐⭐⭐⭐</div>
+            <strong>Low Depreciation</strong>
+            <span>13% · New vehicles · 2018 avg · 32k mi</span>
+          </div>
+          <div class="cluster-box" style="background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.2);">
+            <div class="stars">⭐⭐⭐</div>
+            <strong>Moderate</strong>
+            <span>45% · Everyday cars · 2013 avg · 97k mi</span>
+          </div>
+          <div class="cluster-box" style="background: rgba(239,68,68,0.06); border: 1px solid rgba(239,68,68,0.15);">
+            <div class="stars">⭐⭐</div>
+            <strong>High Depreciation</strong>
+            <span>59% · Old economy · 2006 avg · 171k mi</span>
+          </div>
+          <div class="cluster-box" style="background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.25);">
+            <div class="stars">⭐</div>
+            <strong>Severe</strong>
+            <span>71% · Old luxury · 2005 avg · 131k mi</span>
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <footer>
+    <span>CS163 Senior Project · Group 20 · Nyi Wai Yan Tun & Sana Al Hamimidi</span>
+    <span>San José State University · Spring 2026</span>
+  </footer>
+
+  <script>
+    // Interactive depreciation by region chart
+    const ctx = document.getElementById('depreciation-chart').getContext('2d');
+
+    const regions = [
+      'siskiyou county', 'palm springs', 'inland empire', 'los angeles',
+      'yuba-sutter', 'modesto', 'ventura county', 'orange county',
+      'san diego', 'sacramento', 'gold country', 'mendocino county',
+      'san luis obispo', 'stockton', 'SF bay area', 'fresno / madera',
+      'chico', 'merced', 'reno / tahoe', 'santa barbara',
+      'monterey bay', 'redding', 'humboldt county', 'santa maria',
+      'hanford-corcoran', 'susanville', 'visalia-tulare', 'bakersfield',
+      'imperial county'
+    ];
+
+    const values = [
+      0.613, 0.440, 0.406, 0.384, 0.383, 0.370, 0.368, 0.365,
+      0.360, 0.345, 0.337, 0.325, 0.319, 0.313, 0.307, 0.287,
+      0.279, 0.270, 0.256, 0.250, 0.250, 0.237, 0.228, 0.178,
+      0.163, 0.153, 0.127, 0.080, -0.103
+    ];
+
+    const colors = values.map(v =>
+      v < 0 ? 'rgba(16,185,129,0.7)' :
+      v < 0.2 ? 'rgba(99,102,241,0.7)' :
+      v < 0.35 ? 'rgba(245,158,11,0.7)' :
+      'rgba(239,68,68,0.7)'
+    );
+
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: regions,
+        datasets: [{
+          label: 'Avg Depreciation Rate',
+          data: values,
+          backgroundColor: colors,
+          borderColor: colors.map(c => c.replace('0.7', '1')),
+          borderWidth: 1,
+          borderRadius: 4,
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: ctx => {
+                const v = ctx.parsed.x;
+                return v < 0
+                  ? ` Appreciating: ${(Math.abs(v)*100).toFixed(1)}% above MSRP`
+                  : ` Depreciation: ${(v*100).toFixed(1)}%`;
+              }
+            },
+            backgroundColor: 'rgba(13,18,37,0.95)',
+            titleColor: '#f0f4ff',
+            bodyColor: '#8b9cc8',
+            borderColor: 'rgba(255,255,255,0.1)',
+            borderWidth: 1,
+          }
+        },
+        scales: {
+          x: {
+            grid: { color: 'rgba(255,255,255,0.05)' },
+            ticks: { color: '#8b9cc8', font: { family: 'Inter', size: 11 } },
+            title: { display: true, text: 'Average Depreciation Rate', color: '#8b9cc8' }
+          },
+          y: {
+            grid: { display: false },
+            ticks: { color: '#8b9cc8', font: { family: 'Inter', size: 10 } }
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

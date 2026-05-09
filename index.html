@@ -4,440 +4,1200 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Vehicle Financial Decision Engine</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0b1020;
-      --bg2: #121a30;
-      --panel: rgba(255,255,255,0.08);
-      --panel-solid: #151d35;
-      --text: #f4f7fb;
-      --muted: #c2cbdb;
-      --line: rgba(255,255,255,0.12);
-      --accent: #8b5cf6;
-      --accent2: #22c55e;
-      --accent3: #38bdf8;
-      --shadow: 0 18px 40px rgba(0,0,0,0.28);
-      --radius: 22px;
-      --maxw: 1180px;
+      --bg: #080c18;
+      --bg2: #0d1225;
+      --panel: rgba(255,255,255,0.05);
+      --panel-solid: #111827;
+      --text: #f0f4ff;
+      --muted: #8b9cc8;
+      --line: rgba(255,255,255,0.08);
+      --accent: #6366f1;
+      --accent2: #10b981;
+      --accent3: #f59e0b;
+      --accent4: #ef4444;
+      --shadow: 0 24px 60px rgba(0,0,0,0.4);
+      --radius: 20px;
+      --maxw: 1200px;
     }
 
-    * { box-sizing: border-box; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
+
     body {
-      margin: 0;
-      font-family: Inter, Arial, Helvetica, sans-serif;
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
       color: var(--text);
-      background:
-        radial-gradient(circle at top left, rgba(139,92,246,0.22), transparent 28%),
-        radial-gradient(circle at top right, rgba(56,189,248,0.18), transparent 25%),
-        linear-gradient(180deg, var(--bg), var(--bg2));
-      line-height: 1.65;
+      background: var(--bg);
+      line-height: 1.7;
+      overflow-x: hidden;
     }
 
-    a { color: inherit; }
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background:
+        radial-gradient(ellipse at 10% 20%, rgba(99,102,241,0.12) 0%, transparent 50%),
+        radial-gradient(ellipse at 90% 80%, rgba(16,185,129,0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 50%, rgba(245,158,11,0.04) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
 
     .navbar {
       position: sticky;
       top: 0;
       z-index: 1000;
-      background: rgba(11,16,32,0.72);
-      backdrop-filter: blur(14px);
+      background: rgba(8,12,24,0.85);
+      backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--line);
     }
 
     .nav-inner {
       max-width: var(--maxw);
       margin: 0 auto;
-      padding: 16px 24px;
+      padding: 18px 32px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 22px;
     }
 
     .brand {
-      font-weight: 800;
-      letter-spacing: 0.4px;
-      font-size: 1.05rem;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 600;
+      font-size: 1.1rem;
+      letter-spacing: -0.3px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
-    .nav-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-    }
-
+    .nav-links { display: flex; gap: 28px; }
     .nav-links a {
       text-decoration: none;
       color: var(--muted);
-      font-weight: 700;
-      font-size: 0.95rem;
-      transition: 0.2s ease;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
     }
-
     .nav-links a:hover { color: var(--text); }
 
     .section {
       max-width: var(--maxw);
       margin: 0 auto;
-      padding: 22px 24px 0;
-    }
-
-    .hero {
-      margin-top: 22px;
-      border: 1px solid var(--line);
-      border-radius: 28px;
-      box-shadow: var(--shadow);
-      overflow: hidden;
-      background:
-        linear-gradient(135deg, rgba(139,92,246,0.18), rgba(56,189,248,0.1)),
-        rgba(255,255,255,0.05);
-    }
-
-    .hero-inner {
-      padding: 84px 42px;
-      min-height: 430px;
-      display: grid;
-      place-items: center;
-      text-align: center;
-      position: relative;
-    }
-
-    .hero-inner::before,
-    .hero-inner::after {
-      content: "";
-      position: absolute;
-      border-radius: 999px;
-      filter: blur(12px);
-      opacity: 0.85;
-    }
-
-    .hero-inner::before {
-      width: 220px;
-      height: 220px;
-      background: rgba(139,92,246,0.24);
-      top: -30px;
-      left: -50px;
-    }
-
-    .hero-inner::after {
-      width: 260px;
-      height: 260px;
-      background: rgba(56,189,248,0.18);
-      bottom: -50px;
-      right: -60px;
-    }
-
-    .hero-content {
+      padding: 0 32px;
       position: relative;
       z-index: 1;
-      max-width: 940px;
     }
 
-    .eyebrow {
-      display: inline-block;
-      margin-bottom: 16px;
-      padding: 8px 14px;
+    /* HERO */
+    .hero {
+      padding: 100px 32px 80px;
+      max-width: var(--maxw);
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
       border-radius: 999px;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid var(--line);
-      color: #dce7f9;
-      font-size: 0.92rem;
-      font-weight: 700;
-      letter-spacing: 0.4px;
+      background: rgba(99,102,241,0.12);
+      border: 1px solid rgba(99,102,241,0.3);
+      color: #a5b4fc;
+      font-size: 0.85rem;
+      font-weight: 500;
+      margin-bottom: 24px;
+    }
+
+    .hero-eyebrow::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
     }
 
     .hero h1 {
-      margin: 0;
-      font-size: clamp(2.3rem, 5vw, 4.7rem);
-      line-height: 1.08;
-      letter-spacing: -1.2px;
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(2.8rem, 6vw, 5.5rem);
+      font-weight: 600;
+      line-height: 1.05;
+      letter-spacing: -2px;
+      margin-bottom: 24px;
+    }
+
+    .hero h1 span {
+      background: linear-gradient(135deg, #6366f1, #10b981, #f59e0b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
     .hero p {
-      margin: 18px auto 0;
-      max-width: 760px;
-      color: #d7e3f4;
-      font-size: 1.08rem;
+      max-width: 680px;
+      color: var(--muted);
+      font-size: 1.1rem;
+      margin-bottom: 40px;
     }
 
-    .hero-meta {
-      margin-top: 26px;
+    .hero-badges {
       display: flex;
-      justify-content: center;
-      gap: 14px;
       flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 48px;
     }
 
-    .hero-badge {
-      padding: 12px 16px;
-      border-radius: 14px;
-      background: rgba(255,255,255,0.08);
+    .badge {
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: var(--panel);
       border: 1px solid var(--line);
-      font-weight: 700;
-      color: #edf4ff;
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--muted);
     }
 
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin: 48px 0;
+    }
+
+    .stat-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+    }
+
+    .stat-card strong {
+      display: block;
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.2rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .stat-card span { color: var(--muted); font-size: 0.9rem; }
+
+    /* CARDS */
     .card {
       background: var(--panel);
       border: 1px solid var(--line);
       border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 28px;
-      margin: 24px 0;
+      padding: 32px;
+      margin: 12px 0;
       backdrop-filter: blur(12px);
     }
 
-    .card h2,
-    .card h3 {
-      margin-top: 0;
-      margin-bottom: 16px;
-      letter-spacing: -0.4px;
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
     }
 
-    .card h2 { font-size: 2rem; }
-    .card h3 { font-size: 1.45rem; }
+    .card-icon {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
 
-    .lead {
-      font-size: 1.08rem;
-      color: #e4ecf8;
+    .card h2 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 500;
+      letter-spacing: -0.5px;
+    }
+
+    .card h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 500;
+    }
+
+    .section-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.4rem;
+      font-weight: 600;
+      letter-spacing: -1px;
+      margin-bottom: 8px;
+    }
+
+    .section-sub {
+      color: var(--muted);
+      font-size: 1rem;
+      margin-bottom: 32px;
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--line);
+      margin: 48px 0;
     }
 
     .grid-2 {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 24px;
-    }
-
-    .pill-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 18px;
-    }
-
-    .pill {
-      padding: 9px 14px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid var(--line);
-      color: #eef5ff;
-      font-weight: 700;
-      font-size: 0.93rem;
-    }
-
-    .stat-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(2, 1fr);
       gap: 16px;
-      margin-top: 4px;
     }
 
-    .stat {
-      background: linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.05));
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 22px;
-      box-shadow: var(--shadow);
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
     }
 
-    .stat strong {
+    /* FINDINGS */
+    .finding-item {
+      display: flex;
+      gap: 16px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .finding-item:last-child { border-bottom: none; }
+
+    .finding-num {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2rem;
+      font-weight: 600;
+      color: rgba(99,102,241,0.3);
+      min-width: 48px;
+      line-height: 1;
+      padding-top: 4px;
+    }
+
+    .finding-text strong {
       display: block;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: var(--text);
+    }
+
+    .finding-text p { color: var(--muted); font-size: 0.95rem; }
+
+    /* CHART IMAGES */
+    .chart-container {
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .chart-container img {
+      width: 100%;
+      display: block;
+    }
+
+    .chart-label {
+      padding: 12px 16px;
+      background: var(--panel);
+      font-size: 0.88rem;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      text-align: center;
+    }
+
+    /* MODEL METRICS */
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin: 20px 0;
+    }
+
+    .metric-card {
+      background: rgba(99,102,241,0.08);
+      border: 1px solid rgba(99,102,241,0.2);
+      border-radius: 14px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .metric-card strong {
+      display: block;
+      font-family: 'Outfit', sans-serif;
       font-size: 1.8rem;
-      margin-bottom: 8px;
+      font-weight: 600;
+      color: #a5b4fc;
+      margin-bottom: 6px;
     }
 
-    .stat span,
-    .card p,
-    .card li {
+    .metric-card span { color: var(--muted); font-size: 0.88rem; }
+
+    /* PREDICTION FORM */
+    .predict-section {
+      background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(16,185,129,0.05));
+      border: 1px solid rgba(99,102,241,0.2);
+      border-radius: 24px;
+      padding: 40px;
+      margin: 16px 0;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin: 24px 0;
+    }
+
+    .form-group { display: flex; flex-direction: column; gap: 8px; }
+
+    .form-group label {
+      font-size: 0.85rem;
+      font-weight: 600;
       color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
-    .accent-line {
-      height: 4px;
-      width: 88px;
-      border-radius: 999px;
-      background: linear-gradient(90deg, var(--accent), var(--accent3), var(--accent2));
-      margin-bottom: 18px;
-    }
-
-    ul.clean, ol.clean {
-      padding-left: 22px;
-      margin: 0;
-    }
-
-    li + li { margin-top: 10px; }
-
-    .footer {
-      max-width: var(--maxw);
-      margin: 18px auto 42px;
-      padding: 0 24px;
-      color: var(--muted);
+    .form-group select,
+    .form-group input {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 12px 14px;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
       font-size: 0.95rem;
+      transition: border-color 0.2s, background 0.2s;
+      -webkit-appearance: none;
     }
 
-    @media (max-width: 920px) {
-      .grid-2, .stat-grid {
+    .form-group select:focus,
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--accent);
+      background: rgba(99,102,241,0.08);
+    }
+
+    .form-group select option { background: #1a2035; color: var(--text); }
+
+    .btn-predict {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding: 16px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent), #8b5cf6);
+      color: white;
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+      margin-top: 8px;
+    }
+
+    .btn-predict:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-predict:active { transform: translateY(0); }
+    .btn-predict:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* RESULTS */
+    .result-box {
+      display: none;
+      margin-top: 28px;
+      border-top: 1px solid var(--line);
+      padding-top: 28px;
+    }
+
+    .result-box.visible { display: block; }
+
+    .result-main {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .result-price {
+      font-family: 'Outfit', sans-serif;
+      font-size: 3rem;
+      font-weight: 600;
+      color: var(--accent2);
+    }
+
+    .result-label { color: var(--muted); font-size: 0.9rem; margin-bottom: 4px; }
+
+    .demand-pill {
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: rgba(16,185,129,0.12);
+      border: 1px solid rgba(16,185,129,0.3);
+      color: #6ee7b7;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    /* REGIONAL COMPARISON */
+    .region-compare {
+      margin-top: 24px;
+    }
+
+    .region-compare h4 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      margin-bottom: 16px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .region-bars { display: flex; flex-direction: column; gap: 10px; }
+
+    .region-bar-item {
+      display: grid;
+      grid-template-columns: 160px 1fr 100px;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .region-name { font-size: 0.9rem; color: var(--muted); }
+
+    .bar-track {
+      height: 8px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    .bar-fill.highlighted {
+      background: linear-gradient(90deg, var(--accent2), #34d399);
+    }
+
+    .region-price {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 500;
+      font-size: 0.95rem;
+      text-align: right;
+    }
+
+    .region-price.best { color: var(--accent2); }
+
+    .loading-spinner {
+      display: none;
+      text-align: center;
+      padding: 20px;
+      color: var(--muted);
+    }
+
+    .loading-spinner.visible { display: block; }
+
+    /* PILL TAGS */
+    .pill-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+    .pill {
+      padding: 7px 14px;
+      border-radius: 999px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.88rem;
+      font-weight: 500;
+    }
+
+    .pill.green { background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.2); color: #6ee7b7; }
+    .pill.purple { background: rgba(99,102,241,0.1); border-color: rgba(99,102,241,0.2); color: #a5b4fc; }
+    .pill.amber { background: rgba(245,158,11,0.1); border-color: rgba(245,158,11,0.2); color: #fcd34d; }
+
+    /* FOOTER */
+    footer {
+      max-width: var(--maxw);
+      margin: 48px auto 32px;
+      padding: 24px 32px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--muted);
+      font-size: 0.9rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .error-msg {
+      color: #f87171;
+      font-size: 0.9rem;
+      margin-top: 8px;
+      display: none;
+    }
+
+    .error-msg.visible { display: block; }
+
+    @media (max-width: 900px) {
+      .grid-2, .grid-3, .stat-row, .form-grid, .metric-grid {
         grid-template-columns: 1fr;
       }
-
-      .nav-inner {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .hero-inner {
-        padding: 64px 24px;
-        min-height: 360px;
-      }
+      .nav-inner { flex-direction: column; gap: 12px; }
+      .hero { padding: 60px 24px 40px; }
+      .section { padding: 0 20px; }
+      .result-main { flex-direction: column; align-items: flex-start; gap: 12px; }
+      .region-bar-item { grid-template-columns: 120px 1fr 90px; }
     }
   </style>
 </head>
 <body>
+
+  <!-- NAV -->
   <header class="navbar">
     <div class="nav-inner">
       <div class="brand">Vehicle Financial Decision Engine</div>
       <nav class="nav-links">
-        <a href="#home">HOME</a>
-        <a href="#summary">PROJECT SUMMARY</a>
-        <a href="#data">DATA SOURCES</a>
-        <a href="#findings">FINDINGS</a>
-        <a href="#impact">BROADER IMPACTS</a>
-      </nav>
+        <a href="index.html">Home</a>
+        <a href="objectives.html">Objectives</a>
+        <a href="methods.html">Methods</a>
+        <a href="findings.html">Findings</a>
+        <a href="index.html#predict">Predict</a>
+</nav>
     </div>
   </header>
 
   <main>
-    <section class="section" id="home">
-      <div class="hero">
-        <div class="hero-inner">
-          <div class="hero-content">
-            <div class="eyebrow">CS Project Website</div>
-            <h1>Vehicle Financial Decision Engine</h1>
-            <p>
-              A data-driven project that helps people make smarter vehicle decisions by studying depreciation,
-              regional market behavior, and long-term financial value.
-            </p>
-            <div class="hero-meta">
-              <div class="hero-badge">Group ID: 20</div>
-              <div class="hero-badge">Members: Nyi Wai Yan Tun, Sana Al Hamimidi</div>
+
+    <!-- HERO -->
+    <section class="hero" id="home">
+      <div class="hero-eyebrow">CS163 Senior Project · Group 20 · Spring 2026</div>
+      <h1>Vehicle Financial <span>Decision Engine</span></h1>
+      <p>
+        A regional depreciation and resale value analysis of the California used car market, combining
+        50,000+ vehicle listings, 3.6 million DMV registration records, and machine learning to quantify
+        how geography, fuel type, and vehicle characteristics influence long-term financial value.
+      </p>
+       <p style="color: var(--muted); font-size: 1rem; margin-top: 16px; margin-bottom: 12px;">Three key research questions are investigated:</p>
+      <ol style="color: var(--muted); font-size: 1rem; padding-left: 24px; line-height: 2;">
+        <li>Which vehicle features affect resale price the most?</li>
+        <li>How does geography in California affect resale value?</li>
+        <li>Does selling the same vehicle acorss California region yield different resale prices?</li>
+      </ol>
+      <div class="hero-badges">
+        <span class="badge">Nyi Wai Yan Tun</span>
+        <span class="badge">Sana Al Hamimidi</span>
+        <span class="badge">San José State University</span>
+        <span class="badge">XGBoost · K-Means · Demand Engineering</span>
+      </div>
+
+      <div class="stat-row">
+        <div class="stat-card">
+          <strong>50,614</strong>
+          <span>CA vehicle listings after filtering</span>
+        </div>
+        <div class="stat-card">
+          <strong>3.6M</strong>
+          <span>registration records across 6 years</span>
+        </div>
+        <div class="stat-card">
+          <strong>8</strong>
+          <span>datasets combined for analysis</span>
+        </div>
+        <div class="stat-card">
+          <strong>29</strong>
+          <span>California regions analyzed</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- FINDINGS -->
+    <section class="section" id="findings" style="padding-top: 48px; padding-bottom: 48px;">
+      <div class="section-title">Key Findings</div>
+      <div class="section-sub">What the data revealed about California's used car market</div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon" style="background: rgba(99,102,241,0.15);">📊</div>
+            <h3>What Drives Resale Price</h3>
+          </div>
+          <div class="finding-item">
+            <div class="finding-num">01</div>
+            <div class="finding-text">
+              <strong>Fuel type is the #1 predictor (27% importance)</strong>
+              <p>Diesel vehicles average $32,001 — the highest of any fuel type — driven by truck dominance. Fuel type alone is not a clean signal without controlling for vehicle type.</p>
             </div>
+          </div>
+          <div class="finding-item">
+            <div class="finding-num">02</div>
+            <div class="finding-text">
+              <strong>Year and odometer are strong secondary drivers</strong>
+              <p>Year has a correlation of 0.59 with price. Odometer has a correlation of -0.58. Together they explain most of the depreciation signal.</p>
+            </div>
+          </div>
+          <div class="finding-item">
+            <div class="finding-num">03</div>
+            <div class="finding-text">
+              <strong>Condition has a sharp impact at the low end</strong>
+              <p>New condition averages $24,561 while fair condition averages only $3,796 — a 85% drop. Condition matters most when a car is in poor shape.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon" style="background: rgba(16,185,129,0.15);">🗺️</div>
+            <h3>Geography Matters More Than You Think</h3>
+          </div>
+          <div class="finding-item">
+            <div class="finding-num">04</div>
+            <div class="finding-text">
+              <strong>Same car, $25,000 price difference by region</strong>
+              <p>A Chevrolet truck in Imperial County averages $45,645 vs $17,095 in Los Angeles — a $28,000 difference for the same brand purely due to regional demand.</p>
+            </div>
+          </div>
+          <div class="finding-item">
+            <div class="finding-num">05</div>
+            <div class="finding-text">
+              <strong>Agricultural regions have the lowest depreciation</strong>
+              <p>Imperial County (-0.10), Bakersfield (0.08), and Visalia-Tulare (0.13) show the lowest depreciation rates — driven by high demand for work trucks.</p>
+            </div>
+          </div>
+          <div class="finding-item">
+            <div class="finding-num">06</div>
+            <div class="finding-text">
+              <strong>Urban markets depreciate faster due to supply</strong>
+              <p>Los Angeles (0.38) and Inland Empire (0.41) show higher depreciation despite higher incomes — more listings means more competition and lower prices.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon" style="background: rgba(245,158,11,0.15);">🚗</div>
+            <h3>Depreciation by Brand and Type</h3>
+          </div>
+          <div class="finding-item">
+            <div class="finding-num">07</div>
+            <div class="finding-text">
+              <strong>Trucks appreciate — not depreciate</strong>
+              <p>RAM (0.005), GMC (0.13), and Ford F-150 (0.16) show near-zero or negligible depreciation. Heavy duty trucks have appreciated above their original MSRP post-2020.</p>
+            </div>
+          </div>
+          <div class="finding-item">
+            <div class="finding-num">08</div>
+            <div class="finding-text">
+              <strong>Tesla holds value best among passenger cars</strong>
+              <p>Tesla shows a depreciation rate of only 0.08 — the lowest of any passenger vehicle brand — reflecting California's strong EV demand.</p>
+            </div>
+          </div>
+          <div class="finding-item">
+            <div class="finding-num">09</div>
+            <div class="finding-text">
+              <strong>Discontinued brands depreciate fastest</strong>
+              <p>Mercury (0.84), Pontiac (0.79), and Saturn (0.78) show the highest depreciation rates — no manufacturer support means rapidly falling demand.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon" style="background: rgba(239,68,68,0.15);">⚡</div>
+            <h3>The EV Shift Is Already Happening</h3>
+          </div>
+          <div class="finding-item">
+            <div class="finding-num">10</div>
+            <div class="finding-text">
+              <strong>Battery Electric registrations grew 6x from 2019-2024</strong>
+              <p>From 226,614 registered EVs in 2019 to 1,459,536 in 2024. California's EV transition is accelerating faster than most buyers realize.</p>
+            </div>
+          </div>
+          <div class="finding-item">
+            <div class="finding-num">11</div>
+            <div class="finding-text">
+              <strong>Gasoline registrations declined by 2 million</strong>
+              <p>From 26.9M in 2019 to 24.7M in 2024. Buying a gasoline car today means buying into a shrinking market — which affects long-term resale value.</p>
+            </div>
+          </div>
+          <div class="finding-item">
+            <div class="finding-num">12</div>
+            <div class="finding-text">
+              <strong>Fuel type alone does not tell the full story</strong>
+              <p>Diesel tops average resale prices but this is driven by truck dominance, not diesel passenger cars. Vehicle type must be considered alongside fuel type.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CHARTS -->
+      <div style="margin-top: 32px;">
+        <div class="grid-2">
+          <div>
+            <div class="chart-container">
+              <img src="feature_importance.png" alt="XGBoost Feature Importance" onerror="this.parentElement.style.display='none'">
+            </div>
+            <div class="chart-label">Fig 1. XGBoost Feature Importance — Fuel type, year, and odometer are the top 3 predictors of resale price</div>
+          </div>
+          <div>
+            <div class="chart-container">
+              <img src="actual_vs_predicted.png" alt="Actual vs Predicted Price" onerror="this.parentElement.style.display='none'">
+            </div>
+            <div class="chart-label">Fig 2. Actual vs Predicted Price — Points clustering along the diagonal indicate accurate predictions</div>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="section" id="summary">
-      <div class="card">
-        <div class="accent-line"></div>
-        <h2>Project Summary</h2>
-        <p class="lead">
-          This project helps car buyers make smarter financial decisions by looking beyond the listed price of a vehicle.
-          The platform focuses on long-term financial effects like depreciation, insurance-related cost context, and
-          region-based market behavior across California.
-        </p>
-        <p>
-          A major idea behind this project is that vehicle value does not change the same way everywhere. A truck may hold
-          value better in one region while losing value faster in another. Because of that, the website is designed to let
-          users compare depreciation patterns across regions and understand how geography affects the long-term value of a car.
-        </p>
-        <p>
-          The system is also planned to use machine learning to assign each vehicle a depreciation rating out of 5, helping
-          users compare vehicles in a way that is easier to understand.
-        </p>
-        <div class="pill-row">
-          <span class="pill">California market focus</span>
-          <span class="pill">Regional depreciation analysis</span>
-          <span class="pill">Vehicle comparison</span>
-          <span class="pill">ML-based rating system</span>
-        </div>
-      </div>
-    </section>
+    <div class="divider"></div>
 
-    <section class="section">
-      <div class="stat-grid">
-        <div class="stat"><strong>8</strong><span>datasets combined for the project</span></div>
-        <div class="stat"><strong>50,614</strong><span>California vehicle listings after filtering</span></div>
-        <div class="stat"><strong>26</strong><span>columns in the original vehicles dataset</span></div>
-        <div class="stat"><strong>5-star</strong><span>planned depreciation rating scale</span></div>
-      </div>
-    </section>
+    <!-- MODEL -->
+    <section class="section" id="model" style="padding-top: 48px; padding-bottom: 48px;">
+      <div class="section-title">The Model</div>
+      <div class="section-sub">XGBoost trained on 37,991 California vehicle listings</div>
 
-    <section class="section" id="data">
       <div class="grid-2">
         <div class="card">
-          <div class="accent-line"></div>
-          <h3>Data Sources</h3>
-          <ol class="clean">
-            <li><strong>vehicles.csv</strong> - Craigslist vehicle listings used for California resale analysis.</li>
-            <li><strong>vehicle fuel-type registration datasets</strong> - annual registration data by zip code and fuel type in California.</li>
-            <li><strong>car_data.csv</strong> - vehicle MSRP and pricing data used to help estimate depreciation behavior.</li>
-            <li><strong>Insurance expenditure data</strong> - state-level cost context for ownership.</li>
-          </ol>
-        </div>
-
-        <div class="card">
-          <div class="accent-line"></div>
-          <h3>Core Features Used</h3>
-          <ul class="clean">
-            <li>Region and zip-code based demand</li>
-            <li>Price, year, and odometer</li>
-            <li>Manufacturer, model, condition, fuel, type, and size</li>
-            <li>Registration trends and geographic market differences</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="findings">
-      <div class="grid-2">
-        <div class="card">
-          <div class="accent-line"></div>
-          <h3>Preliminary Findings</h3>
-          <ul class="clean">
-            <li>Newer vehicles tend to list for higher prices.</li>
-            <li>Higher mileage is linked to lower prices.</li>
-            <li>Top registered brands also appear among the most listed used cars in California.</li>
-            <li>Regional demand likely plays a meaningful role in resale value.</li>
-            <li>Fuel type alone is not enough; vehicle type also matters when studying depreciation.</li>
-          </ul>
-        </div>
-
-        <div class="card">
-          <div class="accent-line"></div>
-          <h3>Questions the Project Tries to Answer</h3>
-          <ul class="clean">
-            <li>How does geography within California affect depreciation?</li>
-            <li>Which vehicle features most influence resale value over time?</li>
-            <li>What combination of price, interest rate, demand, and location gives the best long-term value?</li>
-            <li>Which vehicle segments keep a more stable depreciation curve across regions?</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="impact">
-      <div class="grid-2">
-        <div class="card">
-          <div class="accent-line"></div>
-          <h3>Broader Impacts</h3>
-          <p>
-            This project can help first-time buyers, students, seniors, and budget-conscious families understand the hidden
-            long-term cost of owning a car. It can also help gig drivers and small dealerships make smarter decisions using
-            clearer market signals.
+          <h3 style="margin-bottom: 20px;">Model Performance</h3>
+          <div class="metric-grid">
+            <div class="metric-card">
+              <strong>0.779</strong>
+              <span>R² Score</span>
+            </div>
+            <div class="metric-card">
+              <strong>$5,891</strong>
+              <span>Avg Error (RMSE)</span>
+            </div>
+            <div class="metric-card">
+              <strong>37,991</strong>
+              <span>Training rows</span>
+            </div>
+          </div>
+          <p style="color: var(--muted); font-size: 0.95rem; margin-top: 16px;">
+            The model explains 77.9% of used car price variation in California — consistent with industry standard performance for used car price prediction (0.75–0.85 range).
           </p>
-          <p>
-            By turning complicated financial patterns into simple visual comparisons, the platform supports better planning,
-            better negotiation, and better value for buyers over time.
-          </p>
+          <div class="pill-row" style="margin-top: 20px;">
+            <span class="pill purple">XGBoost Regressor</span>
+            <span class="pill purple">100 estimators</span>
+            <span class="pill purple">Max depth 6</span>
+            <span class="pill purple">Learning rate 0.1</span>
+          </div>
         </div>
 
-     
-  <footer class="footer">
-    <p>
-      
-    </p>
+        <div class="card">
+          <h3 style="margin-bottom: 20px;">Features Used</h3>
+          <div class="finding-item">
+            <div class="finding-text">
+              <strong>Core vehicle features</strong>
+              <p>Year, odometer, manufacturer, condition, fuel type, vehicle type, region</p>
+            </div>
+          </div>
+          <div class="finding-item">
+            <div class="finding-text">
+              <strong>Engineered demand score</strong>
+              <p>Calculated from 6 years of DMV registration data by region, make and fuel type. Captures how in-demand a specific vehicle is in a specific California area.</p>
+            </div>
+          </div>
+          <div class="finding-item">
+            <div class="finding-text">
+              <strong>What the model does NOT use</strong>
+              <p>MSRP and depreciation rate were excluded to prevent data leakage — the model learns from genuine market signals only.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- K-Means -->
+      <div class="card" style="margin-top: 16px;">
+        <h3 style="margin-bottom: 20px;">5 Depreciation Clusters Discovered by K-Means</h3>
+        <div class="grid-3" style="gap: 12px;">
+          <div style="background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.2); border-radius: 14px; padding: 20px;">
+            <div style="font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 1.4rem; color: #6ee7b7; margin-bottom: 8px;">⭐⭐⭐⭐⭐</div>
+            <strong style="display: block; margin-bottom: 6px;">Appreciating Vehicles</strong>
+            <p style="color: var(--muted); font-size: 0.88rem;">Avg depreciation: -20% · Listed above MSRP · Mostly trucks and work vehicles · 2014 avg year · 60k avg miles</p>
+          </div>
+          <div style="background: rgba(99,102,241,0.08); border: 1px solid rgba(99,102,241,0.2); border-radius: 14px; padding: 20px;">
+            <div style="font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 1.4rem; color: #a5b4fc; margin-bottom: 8px;">⭐⭐⭐⭐</div>
+            <strong style="display: block; margin-bottom: 6px;">Low Depreciation</strong>
+            <p style="color: var(--muted); font-size: 0.88rem;">Avg depreciation: 13% · Newest vehicles · Lowest mileage · High MSRP · 2018 avg year · 32k avg miles</p>
+          </div>
+          <div style="background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.2); border-radius: 14px; padding: 20px;">
+            <div style="font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 1.4rem; color: #fcd34d; margin-bottom: 8px;">⭐⭐⭐</div>
+            <strong style="display: block; margin-bottom: 6px;">Moderate Depreciation</strong>
+            <p style="color: var(--muted); font-size: 0.88rem;">Avg depreciation: 45% · Typical everyday used car · 2013 avg year · 97k avg miles</p>
+          </div>
+          <div style="background: rgba(239,68,68,0.06); border: 1px solid rgba(239,68,68,0.15); border-radius: 14px; padding: 20px;">
+            <div style="font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 1.4rem; color: #fca5a5; margin-bottom: 8px;">⭐⭐</div>
+            <strong style="display: block; margin-bottom: 6px;">High Depreciation</strong>
+            <p style="color: var(--muted); font-size: 0.88rem;">Avg depreciation: 59% · Old high-mileage economy cars · 2006 avg year · 171k avg miles</p>
+          </div>
+          <div style="background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.25); border-radius: 14px; padding: 20px;">
+            <div style="font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 1.4rem; color: #f87171; margin-bottom: 8px;">⭐</div>
+            <strong style="display: block; margin-bottom: 6px;">Severe Depreciation</strong>
+            <p style="color: var(--muted); font-size: 0.88rem;">Avg depreciation: 71% · Older luxury vehicles past prime · 2005 avg year · 131k avg miles</p>
+          </div>
+          <div style="background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; justify-content: center;">
+            <p style="color: var(--muted); font-size: 0.9rem;">K-Means clustering (K=5) was applied to avg_msrp, depreciation_rate, odometer, and year. Features were standardized before clustering to ensure equal weighting.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- PREDICT -->
+    <section class="section" id="predict" style="padding-top: 48px; padding-bottom: 48px;">
+      <div class="section-title">Resale Price Predictor</div>
+      <div class="section-sub">Enter your vehicle details to get an estimated resale value across California regions</div>
+
+      <div class="predict-section">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+          <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--accent2); animation: pulse 2s infinite;"></div>
+          <span style="color: var(--muted); font-size: 0.9rem;">Powered by XGBoost · R² = 0.779 · Trained on 37,991 California listings</span>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Manufacturer</label>
+            <select id="manufacturer">
+              <option value="">Select manufacturer</option>
+              <option value="acura">Acura</option>
+              <option value="audi">Audi</option>
+              <option value="bmw">BMW</option>
+              <option value="buick">Buick</option>
+              <option value="cadillac">Cadillac</option>
+              <option value="chevrolet">Chevrolet</option>
+              <option value="chrysler">Chrysler</option>
+              <option value="dodge">Dodge</option>
+              <option value="fiat">Fiat</option>
+              <option value="ford">Ford</option>
+              <option value="gmc">GMC</option>
+              <option value="honda">Honda</option>
+              <option value="hyundai">Hyundai</option>
+              <option value="infiniti">Infiniti</option>
+              <option value="jaguar">Jaguar</option>
+              <option value="jeep">Jeep</option>
+              <option value="kia">Kia</option>
+              <option value="lexus">Lexus</option>
+              <option value="lincoln">Lincoln</option>
+              <option value="mazda">Mazda</option>
+              <option value="mercedes-benz">Mercedes-Benz</option>
+              <option value="mini">Mini</option>
+              <option value="mitsubishi">Mitsubishi</option>
+              <option value="nissan">Nissan</option>
+              <option value="porsche">Porsche</option>
+              <option value="ram">RAM</option>
+              <option value="subaru">Subaru</option>
+              <option value="tesla">Tesla</option>
+              <option value="toyota">Toyota</option>
+              <option value="volkswagen">Volkswagen</option>
+              <option value="volvo">Volvo</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Year</label>
+            <input type="number" id="year" placeholder="e.g. 2018" min="2000" max="2023" />
+          </div>
+
+          <div class="form-group">
+            <label>Odometer (miles)</label>
+            <input type="number" id="odometer" placeholder="e.g. 50000" min="1000" max="300000" />
+          </div>
+
+          <div class="form-group">
+            <label>Condition</label>
+            <select id="condition">
+              <option value="">Select condition</option>
+              <option value="new">New</option>
+              <option value="like new">Like New</option>
+              <option value="excellent">Excellent</option>
+              <option value="good">Good</option>
+              <option value="fair">Fair</option>
+              <option value="salvage">Salvage</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Fuel Type</label>
+            <select id="fuel">
+              <option value="">Select fuel type</option>
+              <option value="gas">Gasoline</option>
+              <option value="diesel">Diesel</option>
+              <option value="electric">Electric</option>
+              <option value="hybrid">Hybrid</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Vehicle Type</label>
+            <select id="type">
+              <option value="">Select type</option>
+              <option value="sedan">Sedan</option>
+              <option value="SUV">SUV</option>
+              <option value="pickup">Pickup</option>
+              <option value="truck">Truck</option>
+              <option value="hatchback">Hatchback</option>
+              <option value="coupe">Coupe</option>
+              <option value="van">Van</option>
+              <option value="convertible">Convertible</option>
+              <option value="wagon">Wagon</option>
+              <option value="mini-van">Mini-Van</option>
+              <option value="offroad">Offroad</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Your Region</label>
+            <select id="region">
+              <option value="">Select region</option>
+              <option value="bakersfield">Bakersfield</option>
+              <option value="chico">Chico</option>
+              <option value="fresno / madera">Fresno / Madera</option>
+              <option value="gold country">Gold Country</option>
+              <option value="hanford-corcoran">Hanford-Corcoran</option>
+              <option value="humboldt county">Humboldt County</option>
+              <option value="imperial county">Imperial County</option>
+              <option value="inland empire">Inland Empire</option>
+              <option value="los angeles">Los Angeles</option>
+              <option value="mendocino county">Mendocino County</option>
+              <option value="merced">Merced</option>
+              <option value="modesto">Modesto</option>
+              <option value="monterey bay">Monterey Bay</option>
+              <option value="orange county">Orange County</option>
+              <option value="palm springs">Palm Springs</option>
+              <option value="redding">Redding</option>
+              <option value="reno / tahoe">Reno / Tahoe</option>
+              <option value="sacramento">Sacramento</option>
+              <option value="san diego">San Diego</option>
+              <option value="san luis obispo">San Luis Obispo</option>
+              <option value="santa barbara">Santa Barbara</option>
+              <option value="santa maria">Santa Maria</option>
+              <option value="SF bay area">SF Bay Area</option>
+              <option value="siskiyou county">Siskiyou County</option>
+              <option value="stockton">Stockton</option>
+              <option value="susanville">Susanville</option>
+              <option value="ventura county">Ventura County</option>
+              <option value="visalia-tulare">Visalia-Tulare</option>
+              <option value="yuba-sutter">Yuba-Sutter</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="btn-predict" onclick="predictPrice()">
+          <span id="btn-text">Predict Resale Value</span>
+        </button>
+
+        <div class="error-msg" id="error-msg">Please fill in all fields before predicting.</div>
+
+        <div class="loading-spinner" id="loading">
+          Calculating predicted value across regions...
+        </div>
+
+        <div class="result-box" id="result-box">
+          <div class="result-main">
+            <div>
+              <div class="result-label">Estimated Resale Value in <span id="result-region"></span></div>
+              <div class="result-price" id="result-price"></div>
+            </div>
+            <div>
+              <div class="result-label">Regional Demand Score</div>
+              <div class="demand-pill" id="result-demand"></div>
+            </div>
+          </div>
+
+          <div class="region-compare">
+            <h4>How does this compare across California?</h4>
+            <div class="region-bars" id="region-bars"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- IMPACT -->
+    <section class="section" id="impact" style="padding-top: 48px; padding-bottom: 48px;">
+      <div class="section-title">Broader Impacts</div>
+      <div class="section-sub">Who this project helps and why it matters</div>
+
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-icon" style="background: rgba(99,102,241,0.15); width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; margin-bottom: 16px;">🏠</div>
+          <h3 style="margin-bottom: 12px;">First-Time Buyers</h3>
+          <p style="color: var(--muted);">Understanding the true long-term cost of a vehicle purchase before committing. Avoid the financial ripple effect of buying a depreciating asset without knowing it.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon" style="background: rgba(16,185,129,0.15); width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; margin-bottom: 16px;">🚗</div>
+          <h3 style="margin-bottom: 12px;">Gig Workers & Sellers</h3>
+          <p style="color: var(--muted);">Know where to sell your car for maximum return. Our regional comparison shows that the same vehicle can yield $25,000 more in the right California market.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon" style="background: rgba(245,158,11,0.15); width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; margin-bottom: 16px;">📈</div>
+          <h3 style="margin-bottom: 12px;">Smart Investors</h3>
+          <p style="color: var(--muted);">The EV shift is already happening. Gasoline vehicles in high EV adoption areas face increasing depreciation pressure. Make informed decisions about what to buy and hold.</p>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top: 16px;">
+        <h3 style="margin-bottom: 16px;">Project Limitations & Future Work</h3>
+        <div class="grid-2">
+          <div>
+            <strong style="display: block; margin-bottom: 8px; color: var(--muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px;">Known Limitations</strong>
+            <ul style="color: var(--muted); font-size: 0.92rem; padding-left: 20px; line-height: 2;">
+              <li>Craigslist listings may not represent dealer or auction markets</li>
+              <li>Brand-level MSRP averaging inflates depreciation for some economy brands</li>
+              <li>MSRP dataset covers 13 brands — remaining brands use proxy values</li>
+              <li>Model explains 77.9% of price variation — 22% remains unexplained</li>
+            </ul>
+          </div>
+          <div>
+            <strong style="display: block; margin-bottom: 8px; color: var(--muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px;">Future Improvements</strong>
+            <ul style="color: var(--muted); font-size: 0.92rem; padding-left: 20px; line-height: 2;">
+              <li>Model-level MSRP matching for more accurate depreciation estimates</li>
+              <li>Incorporate accident history and number of owners</li>
+              <li>Expand to other California data sources beyond Craigslist</li>
+              <li>Add temporal depreciation curves to show value over time</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <span>CS163 Senior Project · Group 20 · Nyi Wai Yan Tun & Sana Al Hamimidi</span>
+    <span>San José State University · Spring 2026</span>
   </footer>
+
+  <script>
+    const API_URL = 'https://depreciation-api-680233638391.us-west1.run.app/predict';
+
+    const COMPARISON_REGIONS = [
+      'los angeles',
+      'SF bay area',
+      'bakersfield',
+      'san diego',
+      'inland empire',
+      'sacramento',
+      'fresno / madera',
+      'orange county'
+    ];
+
+    async function predictForRegion(region, manufacturer, year, odometer, condition, fuel, type) {
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ region, manufacturer, year: parseInt(year), odometer: parseFloat(odometer), condition, fuel, type })
+      });
+      return await res.json();
+    }
+
+    async function predictPrice() {
+      const manufacturer = document.getElementById('manufacturer').value;
+      const year = document.getElementById('year').value;
+      const odometer = document.getElementById('odometer').value;
+      const condition = document.getElementById('condition').value;
+      const fuel = document.getElementById('fuel').value;
+      const type = document.getElementById('type').value;
+      const region = document.getElementById('region').value;
+
+      const errorMsg = document.getElementById('error-msg');
+      if (!manufacturer || !year || !odometer || !condition || !fuel || !type || !region) {
+        errorMsg.classList.add('visible');
+        return;
+      }
+      errorMsg.classList.remove('visible');
+
+      const btn = document.querySelector('.btn-predict');
+      const btnText = document.getElementById('btn-text');
+      const loading = document.getElementById('loading');
+      const resultBox = document.getElementById('result-box');
+
+      btn.disabled = true;
+      btnText.textContent = 'Calculating...';
+      loading.classList.add('visible');
+      resultBox.classList.remove('visible');
+
+      try {
+        // Get prediction for user's region
+        const mainResult = await predictForRegion(region, manufacturer, year, odometer, condition, fuel, type);
+
+        // Get predictions for all comparison regions
+        const allRegions = [...new Set([region, ...COMPARISON_REGIONS])];
+        const regionResults = await Promise.all(
+          allRegions.map(r => predictForRegion(r, manufacturer, year, odometer, condition, fuel, type).then(res => ({ region: r, price: res.predicted_price })))
+        );
+
+        // Display main result
+        document.getElementById('result-region').textContent = region.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+        document.getElementById('result-price').textContent = '$' + mainResult.predicted_price.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+        document.getElementById('result-demand').textContent = 'Demand Score: ' + mainResult.demand_score.toFixed(3);
+
+        // Build region comparison bars
+        const maxPrice = Math.max(...regionResults.map(r => r.price));
+        const barsContainer = document.getElementById('region-bars');
+        barsContainer.innerHTML = '';
+
+        regionResults
+          .sort((a, b) => b.price - a.price)
+          .forEach(item => {
+            const isUserRegion = item.region === region;
+            const isBest = item.price === maxPrice;
+            const pct = (item.price / maxPrice * 100).toFixed(1);
+            const displayName = item.region.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+            const formattedPrice = '$' + item.price.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+
+            barsContainer.innerHTML += `
+              <div class="region-bar-item" style="${isUserRegion ? 'background: rgba(99,102,241,0.06); border-radius: 8px; padding: 4px 8px; margin: -4px -8px;' : ''}">
+                <div class="region-name" style="${isUserRegion ? 'color: #a5b4fc; font-weight: 600;' : ''}">${displayName}${isUserRegion ? ' ★' : ''}</div>
+                <div class="bar-track">
+                  <div class="bar-fill ${isBest ? 'highlighted' : ''}" style="width: ${pct}%"></div>
+                </div>
+                <div class="region-price ${isBest ? 'best' : ''}">${formattedPrice}</div>
+              </div>
+            `;
+          });
+
+        resultBox.classList.add('visible');
+      } catch (err) {
+        errorMsg.textContent = 'Error connecting to prediction API. Please try again.';
+        errorMsg.classList.add('visible');
+      } finally {
+        btn.disabled = false;
+        btnText.textContent = 'Predict Resale Value';
+        loading.classList.remove('visible');
+      }
+    }
+  </script>
+
 </body>
 </html>
-
