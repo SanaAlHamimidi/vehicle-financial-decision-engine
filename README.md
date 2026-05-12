@@ -8,12 +8,12 @@
 
 ## What Is This Repo?
 
-A data-driven resale value and depreciation analysis tool for the California used car market. The project combines 50,000+ Craigslist vehicle listings, 3.6 million California DMV registration records, and an XGBoost model to predict used car resale prices and quantify how geography, fuel type, and vehicle characteristics influence long-term financial value.
+A data-driven resale value and depreciation analysis tool for the California used car market. Our project combines 50,000+ Craigslist vehicle listings, 3.6 million California DMV registration records, and an XGBoost model to predict used car resale prices and analyze how geography, fuel type, and vehicle characteristics influence vehicle's long-term financial value.
 
 The system answers three research questions:
-1. Which vehicle features affect resale price the most?
+1. Which vehicle features have the most impact on depreciation/appreciation the most?
 2. How does geography in California affect resale value?
-3. Does selling the same vehicle across California regions yield different resale prices?
+3. Does selling the same vehicle across different California regions yield different resale prices?
 
 ---
 
@@ -90,8 +90,6 @@ pip install -r requirements.txt
 python app.py
 ```
 
-> **Note:** The API loads model files from Google Cloud Storage. You need valid Google Cloud credentials to run locally. Alternatively, place `xgboost_model.pkl`, `label_encoders.pkl`, and `demand_lookup.csv` in the same directory and update the loading code in `app.py` to use local paths.
-
 ### Running the Notebooks
 
 Open notebooks in Google Colab. Update the file paths to point to your Google Drive folder containing the datasets.
@@ -141,7 +139,7 @@ The inference service is a Flask REST API containerized with Docker and deployed
 }
 ```
 
-The demand score is automatically calculated from the region, manufacturer, and fuel type using the pre-computed lookup table — users do not need to provide it.
+The demand score is automatically calculated from the region, manufacturer, and fuel type using the pre-computed lookup table. Users do not need to provide it.
 
 ### Docker
 
@@ -233,7 +231,6 @@ The Flask API loads all three files from Cloud Storage on startup using the `goo
 
 ## References
 
-- Chen, T., & Guestrin, C. (2016). XGBoost: A scalable tree boosting system. *KDD '16*.
 - California DMV Open Data Portal — Vehicle Registration by Fuel Type
 - Craigslist Used Vehicle Listings Dataset (Kaggle)
 - scikit-learn: Machine Learning in Python — Pedregosa et al., JMLR 2011
